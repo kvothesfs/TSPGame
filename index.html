@@ -1,0 +1,128 @@
+<!doctype html>
+<html>
+<head>
+    <title>TSP Game</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="stylesheet" href="engine_general.css" media="screen" />
+    <link rel="stylesheet" href="engine_mobile.css"
+        media="only screen and (max-width: 780px), screen and (max-height: 440px)" />
+    <link rel="stylesheet" href="engine.css"
+        type="text/css" media="only screen and (min-width: 781px) and (min-height: 441px)" />
+    <link rel="stylesheet" href="icon_style.css" type="text/css" media="screen" />
+
+    <script>
+        var FORCE_TOUCHMODE = false;
+    </script>
+
+    <script src="js/tsp_game.js"></script>
+    <meta charset="UTF-8">
+
+</head>
+<body ondragstart="return false;" ondrop="return false;">
+
+    <div id="layers"></div>
+    <div id="controls">
+        <div id="uni_logo">
+            <img src="univie_logo.gif">
+        </div>
+        <a id="a_newgame" href="#">NEW GAME</a>
+        <div id="loc_info">
+            <a id="a_edit" href="#" class="edit_tour">
+                <div class="icon"><span class="icon-target2"></span></div>
+                <div class="subscript center"><span id="tx_edit">edit</span></div>
+            </a>
+            <a id="a_fewer" href="#">
+                <div class="icon"><span clasS="icon-minus"></span></div>
+                <div class="subscript center"><span id="tx_fewer">fewer</span></div>
+            </a>
+            <a id="a_more" href="#">
+                <div class="icon"><span clasS="icon-plus"></span></div>
+                <div class="subscript center"><span id="tx_more">more</span></div>
+            </a>
+            <div id="d_locs">
+                <div id="current_size">0</div>
+                <div class="subscript center"><span id="tx_locations">Locations</span></div>
+            </div>
+        </div>
+        <div id="lk_info">
+            <div id="lk_tourinfo">
+                <div id="t_linkern">---</div>
+                <div class="subscript right"><span id="tx_best_tour">best&nbsp;tour</span></div>
+            </div>
+            <a id="a_lkshow" href="#">SHOW</a>
+        </div>
+
+        <div id="score_info">
+            <div id="t_percent">19</div>
+            <div id="perc_sign">%</div>
+        </div>
+
+        <div id="current_info">
+            <a id="a_clear_all" href="#">
+                <div id="clear_icon"><span class="icon-close"></span></div>
+                <div id="clear_text">clear all connections</div>
+            </a>
+            <div id="length_info">
+                <div id="t_length" class="right">----</div>
+                <div class="subscript right"><span id="tx_length">tour&nbsp;length</span></div>
+            </div>
+        </div>
+        <div id="best_info">
+            <a id="a_switch_best" href="#">
+                <div id="best_icon"><span class="icon-loop"></span></div>
+                <div id="best_text">back to the best solution</div>
+            </a>
+            <a id="best_length_info" href="#">
+                <div id="t_best" class="right">---</div>
+                <div class="subscript right">
+                    <span id="tx_best">best&nbsp;so&nbsp;far</span>
+                    <span id="tx_best_s">best</span>
+                </div>
+            </a>
+        </div>
+
+        <a id="a_auto" href="#">
+            <div id="auto_label">AUTO</div>
+            <div id="auto_text">Let me improve your current tour.</div>
+        </a>
+
+        <div id="seed_control">
+            <div id="seed_title">Random Seed</div>
+            <input type="number" id="seed_input" value="1871" min="1" max="999999">
+            <a id="a_apply_seed" href="#">Apply</a>
+        </div>
+
+        <div id="scenes_title">Load Scene</div>
+        <div id="scenes">
+            <a id="a_scene_1" class="scene_button" href="#">1</a>
+            <a id="a_scene_2" class="scene_button" href="#">2</a>
+            <a id="a_scene_3" class="scene_button" href="#">3</a>
+            <a id="a_scene_4" class="scene_button" href="#">4</a>
+        </div>
+
+        <div id="copy_title">This is a copy of the original POM game.  <br> All credits go to the original authors.</div>
+
+        <div id="pom_logo">
+            <img src="ncat_logo_sm.png">
+        </div>
+        <div id="app_title">
+            ts-POM
+            1.0beta
+        </div>
+    </div>
+    <div id="footer">
+        <span id="hint_text">Connect all locations in the shortest possible way.</span>
+    </div>
+
+    <script>
+        tsp_setup();
+        tsp_init('layers');
+        tsp_language('en');
+    </script>
+
+
+</body>
+</html>

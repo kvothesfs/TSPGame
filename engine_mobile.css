@@ -1,0 +1,197 @@
+div#layers {
+    left: 0px; right: 55px; bottom: 0px; top: 0px;
+}
+
+body {
+    background-color: white;
+}
+
+
+div#controls {
+    position: absolute;
+    right: 5px; bottom: 0; top: 0px;
+    width: 50px;
+    padding: 0;
+    margin: 0;
+}
+
+div#footer {
+    display: none;
+}
+
+div#uni_logo {
+    display: none;
+}
+
+a#a_newgame {
+    display: block;
+    border: 2px solid #555;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 10px;
+    margin-top: 4px;
+    height: 33px;
+    padding-top: 7px;
+}
+
+div#loc_info { }
+div#lk_info {
+}
+
+a#a_edit, a#a_fewer, a#a_more, a#a_v_plus, a#a_v_minus, a#a_depot {
+    display: none;
+}
+a.edit_scene, a.edit_scene div {
+    display: none;
+}
+
+#d_locs {
+}
+
+div#current_size {
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+div.subscript {
+    font-size: 10px;
+}
+.left {
+    text-align: left;
+}
+.right {
+    /* quick hack */
+    text-align: center;
+}
+.center {
+    text-align: center;
+}
+
+div.icon {
+    color: #222;
+    font-size: 20px;
+    line-height: 40px;
+    text-align: center;
+}
+
+
+div#lk_tourinfo {
+    display: none;
+}
+
+div#t_linkern {
+    display: none;
+}
+
+a#a_lkshow {
+    display: none;
+}
+
+div#score_info {
+    position: relative;
+    text-align: center;
+    margin: 0; padding: 0;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+div#t_percent {
+    font-size: 28px;
+    font-weight: bold;
+    margin: 0;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
+div#perc_sign {
+    display: none;
+}
+
+/* ----------- */
+
+div#current_info {
+    display: none;
+}
+
+div#clear_icon {
+    display: none;
+}
+div#clear_text {
+    display: none;
+}
+
+a#a_clear_all {
+    display: none;
+}
+
+div#length_info {
+    display: none;
+}
+
+div#t_length {
+    display: none;
+}
+
+/* ----------- */
+
+div#best_info {
+}
+div#best_icon {
+    display: none;
+}
+div#best_text {
+    display: none;
+}
+
+a#a_switch_best {
+    display: none;
+}
+
+a#best_length_info { }
+span#tx_best { display: none; }
+span#tx_best_s { display: inline; }
+
+div#t_best {
+    font-size: 20px;
+}
+
+/* ----------- */
+a#a_auto {
+    display: block;
+    border: 2px solid #555;
+    border-radius: 4px;
+    text-align: center;
+    padding: 5px 0;
+    font-size: 10px;
+    margin-top: 4px;
+    height: 30px;
+    line-height: 30px;
+}
+
+div#auto_label {
+}
+div#auto_text {
+    display: none;
+}
+
+/* ----------- */
+
+div#seed_control {
+    display: none;
+}
+
+div#scenes_title {
+    display: none;
+}
+a.scene_button {
+    display: none;
+}
+
+/* ----------- */
+div#pom_logo {
+    display: none;
+}
+
+div#app_title {
+    display: none;
+}

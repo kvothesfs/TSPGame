@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+<head>
+    <title>VRP Board</title>
+    <meta name="viewport" content="minimal-ui, width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="stylesheet" href="engine_general.css" media="screen" />
+    <link rel="stylesheet" href="engine_mobile.css"
+        media="only screen and (max-width: 780px), screen and (max-height: 440px)" />
+    <link rel="stylesheet" href="engine.css"
+        type="text/css" media="only screen and (min-width: 781px) and (min-height: 441px)" />
+    <link rel="stylesheet" href="icon_style.css" type="text/css" media="screen" />
+
+    <link rel="stylesheet" href="vrp_mobile.css"
+        media="only screen and (max-width: 780px), screen and (max-height: 440px)" />
+    <link rel="stylesheet" href="vrp.css"
+        type="text/css" media="only screen and (min-width: 781px) and (min-height: 441px)" />
+
+    <script>
+        var FORCE_TOUCHMODE = false;
+    </script>
+
+    <script src="js/vrp_board.js"></script>
+    <meta charset="UTF-8">
+
+</head>
+<body ondragstart="return false;" ondrop="return false;">
+
+    <div id="layers"></div>
+    <div id="controls">
+        <div id="uni_logo">
+            <img src="univie_logo.gif">
+        </div>
+        <a id="a_newgame" href="#">RESET BOARD</a>
+        <div id="loc_info">
+            <a id="a_edit" href="#" class="edit_tour">
+                <div class="icon"><span class="icon-target2"></span></div>
+                <div class="subscript center"><span id="tx_edit">edit</span></div>
+            </a>
+            <a id="a_fewer" href="#">
+                <div class="icon"><span clasS="icon-minus"></span></div>
+                <div class="subscript center"><span id="tx_fewer">fewer</span></div>
+            </a>
+            <a id="a_more" href="#">
+                <div class="icon"><span clasS="icon-plus"></span></div>
+                <div class="subscript center"><span id="tx_more">more</span></div>
+            </a>
+            <a id="d_locs" href="#">
+                <div id="current_size">0</div>
+                <div class="subscript center"><span id="tx_locations">Locations</span></div>
+            </a>
+        </div>
+        <div id="depot_info">
+            <a id="a_depot" href="#" class="edit_none">
+                <div class="icon"><span class="icon-home2"></span></div>
+                <div class="subscript center"><span id="tx_depot">depot</span></div>
+            </a>
+            <a id="a_v_plus" href="#">
+                <div class="icon"><span clasS="icon-plus"></span></div>
+                <div class="subscript center"><span id="tx_v_plus">more</span></div>
+            </a>
+            <a id="a_v_minus" href="#">
+                <div class="icon"><span clasS="icon-minus"></span></div>
+                <div class="subscript center"><span id="tx_v_minus">fewer</span></div>
+            </a>
+            <a id="d_vehicles" href="#">
+                <div id="current_vehicles">2</div>
+                <div class="subscript center"><span id="tx_vehicles">Vehicles</span></div>
+            </a>
+        </div>
+
+        <div id="d_valid" class="s_incomplete">
+            <span id="tx_valid">Solution is invalid</span>
+            <span id="tx_valid_s">invalid solution</span>
+        </div>
+        <div id="d_stats">
+        </div>
+
+        <div id="current_info">
+            <a id="a_clear_all" href="#">
+                <div id="clear_icon"><span class="icon-close"></span></div>
+                <div id="clear_text">clear all connections</div>
+            </a>
+            <div id="length_info">
+                <div id="t_length" class="right">----</div>
+                <div class="subscript right">
+                    <span id="tx_length">tour&nbsp;length</span>
+                    <span id="tx_length_s">length</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="pom_logo">
+            <img src="pom_logo.png">
+        </div>
+
+    </div>
+
+    <script>
+        tsp_setup();
+        tsp_init('layers');
+        tsp_language('en');
+    </script>
+
+
+</body>
+</html>

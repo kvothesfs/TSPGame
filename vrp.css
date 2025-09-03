@@ -1,0 +1,55 @@
+div#layers {
+    left: 0; right: 261px; bottom: 0px; top: 0px;
+}
+
+
+div#d_stats ul {
+    padding: 0;
+}
+div#d_stats li {
+    list-style: none;
+    margin: 0;
+    font-size: 32px;
+    margin-bottom: 3px;
+    margin-left: 5px;
+    line-height: 30px;
+    color: #444;
+}
+div#d_stats span.node_count {
+    font-size: 14px;
+    margin-left: 10px;
+}
+div#d_stats div.prebox {
+    content: '';
+    width: 10px;
+    height: 30px;
+    display: block;
+    margin-right: 8px;
+    float: left;
+    background-color: #444;
+}
+
+div#d_valid {
+    border: 1px solid #888;
+    padding: 10px;
+    text-align: center;
+    margin: 10px 0 8px 0;
+    border-radius: 5px;
+
+}
+div.s_valid {
+    color: #080;
+}
+span#tx_valid_s {
+    display: none;
+}
+span#tx_valid {
+    display: inline;
+}
+
+div.s_incomplete {
+    color: #a00;
+}
+
+span#tx_length { display: inline; }
+span#tx_length_s { display: none; }

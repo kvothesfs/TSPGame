@@ -1,0 +1,81 @@
+html {
+    -ms-content-zooming: none;
+}
+body {
+    margin: 0; padding: 0;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: none;
+    background-color: white;
+}
+canvas {
+    touch-action: none;
+}
+div, a {
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    font-family: "Arial", sans-serif;
+    text-decoration: none;
+    color: black;
+}
+
+a:hover {
+    text-decoration: none;
+    background-color: #ddd;
+}
+
+canvas.c_layer {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    /* canvas darf keine borders oder padding haben, 
+     * sonst müsste ich das im Script berücksichtigen */
+    border: 0; padding: 0;
+    display: block;
+    overflow: visible;
+}
+
+div#layers {
+    position: absolute;
+    min-width: 100px;
+    min-height: 100px;
+    padding: 0; margin: 0;
+    background-color: #fff;
+    overflow: hidden;
+}
+
+
+@media screen and (max-height: 750px) {
+    div#uni_logo {
+        display: none;
+    }
+}
+@media screen and (max-height: 650px) {
+    div#pom_logo, div#app_title {
+        display: none;
+    }
+}
+@media screen and (max-height: 550px) {
+    div#scenes_title, div#scenes {
+        display: none;
+    }
+}
+
+
+div.info_window {
+    position: absolute;
+    top: 20px;
+    bottom: 20px;
+    left: 40px;
+    width: 300px;
+    overflow: scroll;
+    background-color: yellow;
+    border: 2px solid black;
+    z-index: 999;
+    -moz-user-select: text;
+    -webkit-user-select: text;
+    user-select: text;
+}

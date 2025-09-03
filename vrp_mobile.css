@@ -1,0 +1,52 @@
+a#d_vehicles {
+}
+div#depot_info {
+}
+div#current_vehicles {
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    padding-top: 5px;
+}
+div#current_size {
+    padding-top: 5px;
+}
+
+div#d_stats {
+    display: none;
+}
+
+div#current_info {
+    display: block;
+}
+div#length_info {
+    display: block;
+}
+
+div#t_length {
+    font-size: 20px;
+    display: block;
+}
+
+div#d_valid {
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    margin: 10px 0px 5px 0px;
+    border-top: 1px solid gray;
+    border-bottom: 1px solid gray;
+    padding: 5px 0px;
+    background-color: #eee;
+}
+
+div.s_incomplete {
+    color: red;
+}
+div.s_valid {
+    color: green;
+}
+
+span#tx_valid_s { display: inline; }
+span#tx_valid { display: none; }
+span#tx_length_s { display: inline; }
+span#tx_length { display: none; }
