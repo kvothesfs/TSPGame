@@ -127,7 +127,7 @@ div.icon {
 div#lk_tourinfo {
     position: absolute;
     left: 0; top: -6px;
-    width: 105px;
+    width: 150px;
     text-align: right;
     height: 54px;
 }
@@ -137,18 +137,6 @@ div#t_linkern {
     line-height: 46px;
 }
 
-a#a_lkshow {
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 115px;
-    border: 2px solid #555;
-    border-radius: 4px;
-    text-align: center;
-    font-size: 26px;
-    height: 42px;
-    line-height: 42px;
-}
 
 div#score_info {
     margin-top: 30px;
@@ -281,12 +269,25 @@ div#auto_label {
     line-height: 42px;
     display: inline-block;
 }
+
 div#auto_text {
     display: inline-block;
     font-size: 12px;
     width: 120px;
     right: 0;
     top: 0;
+}
+
+/* ----------- */
+
+a#a_lkshow {
+    display: block;
+    border: 2px solid #555;
+    border-radius: 4px;
+    text-align: center;
+    padding: 5px 0;
+    font-size: 28px;
+    margin-top: 4px;
 }
 
 /* ----------- */
@@ -344,11 +345,11 @@ a.scene_button {
 }
 
 /* ----------- */
-div#pom_logo {
+/* div#pom_logo {
     position: absolute;
     bottom: 0;
     left: 70px;
-}
+} */
 
 div#app_title {
     display: none;
