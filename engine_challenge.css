@@ -1,0 +1,367 @@
+
+div#layers {
+    left: 0; right: 261px; bottom: 40px; top: 0px;
+}
+
+div#controls {
+    padding: 0;
+    position: absolute;
+    right: 0px; bottom: 0; top: 0px;
+    margin: 0;
+    width: 230px;
+    padding: 0 15px 0 15px;
+    border-left: 1px solid #aaa;
+    background-color: #eee;
+}
+
+div#footer {
+    position: absolute;
+    left: 0; right: 261px; bottom: 0px;
+    height: 40px;
+    padding: 0; margin: 0;
+    padding-left: 40px;
+    line-height: 40px;
+    font-size: 18px;
+    font-style: italic;
+}
+
+div#uni_logo {
+    text-align: center;
+    margin: 20px 0;
+}
+
+a#a_newgame {
+    display: none;
+    border: 2px solid #555;
+    border-radius: 4px;
+    text-align: center;
+    padding: 5px 0;
+    font-size: 28px;
+    margin-top: 4px;
+}
+
+div#loc_info {
+    position: relative;
+    margin-top: 8px;
+    height: 52px;
+}
+div#depot_info {
+    position: relative;
+    margin-top: 8px;
+    height: 52px;
+}
+div#lk_info {
+    position: relative;
+    margin-top: 8px;
+    height: 42px;
+}
+
+a#a_edit, a#a_fewer, a#a_more, a#a_v_plus, a#a_v_minus, a#a_depot {
+    display: none;
+    border: 2px solid #555;
+    border-radius: 4px;
+    width: 48px;
+    height: 46px;
+    position: absolute;
+    top: 0;
+}
+a#a_edit div.icon {
+    font-size: 30px;
+}
+a#a_depot div.icon {
+    font-size: 26px;
+}
+a.edit_tour { }
+a.edit_scene, a.edit_scene div {
+    background-color: black;
+    color: white !important;
+}
+
+a#a_fewer  { left: 55px; }
+a#a_more { left: 110px; }
+a#a_v_minus  { left: 55px; }
+a#a_v_plus { left: 110px; }
+
+#d_locs, #d_vehicles {
+    display: block;
+    pointer-events: none;
+    width: 55px;
+    height: 52px;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+div#current_size, div#current_vehicles {
+    display: block;
+    pointer-events: none;
+    font-size: 48px;
+    line-height: 40px;
+    text-align: center;
+    font-weight: bold;
+}
+
+div.subscript {
+    font-size: 12px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    line-height: 12px;
+}
+.left {
+    text-align: left;
+}
+.right {
+    text-align: right;
+}
+.center {
+    text-align: center;
+}
+
+div.icon {
+    color: #222;
+    font-size: 20px;
+    line-height: 40px;
+    text-align: center;
+}
+
+
+div#lk_tourinfo {
+    position: absolute;
+    left: 0; top: -6px;
+    width: 150px;
+    text-align: right;
+    height: 54px;
+}
+
+div#t_linkern {
+    font-size: 46px;
+    line-height: 46px;
+}
+
+
+div#score_info {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+div#t_percent {
+    font-size: 80px;
+    display: inline-block;
+    font-weight: bold;
+}
+div#perc_sign {
+    display: inline-block;
+    font-size: 50px;
+    position: relative;
+    left: -7px;
+}
+
+/* ----------- */
+
+div#current_info {
+    position: relative;
+    height: 42px;
+}
+
+div#clear_icon {
+    color: #222;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 36px;
+    position: absolute;
+    left: 4px;
+    top: 3px;
+}
+div#clear_text {
+    width: 100px;
+    position: absolute;
+    left: 32px;
+    top: 4px;
+    font-size: 14px;
+}
+
+a#a_clear_all {
+    width: 140px;
+    height: 40px;
+    display: block;
+}
+
+div#length_info {
+    position: absolute;
+    right: 0; top: -5px;
+    width: 85px;
+    height: 44px;
+    text-align: right;
+}
+div#length_info div {
+    margin-right: 3px;
+}
+
+div#t_length {
+    line-height: 36px;
+    font-size: 36px;
+    color: #444;
+}
+
+/* ----------- */
+
+div#best_info {
+    position: relative;
+    height: 42px;
+    margin-top: 4px;
+}
+div#best_icon {
+    color: #222;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 36px;
+    position: absolute;
+    left: 4px;
+    top: 3px;
+}
+div#best_text {
+    width: 100px;
+    position: absolute;
+    left: 32px;
+    top: 4px;
+    font-size: 14px;
+}
+
+a#a_switch_best {
+    width: 140px;
+    height: 40px;
+    display: block;
+}
+
+a#best_length_info {
+    position: absolute;
+    right: 0; top: -5px;
+    width: 85px;
+    height: 44px;
+    text-align: right;
+}
+a#best_length_info div {
+    margin-right: 3px;
+}
+span#tx_best { display: inline; }
+span#tx_best_s { display: none; }
+
+div#t_best {
+    line-height: 36px;
+    font-size: 36px;
+    font-weight: bold;
+}
+
+/* ----------- */
+a#a_auto {
+    position: relative;
+    border: 2px solid #555;
+    border-radius: 4px;
+    display: block;
+    height: 42px;
+    padding: 0 10px;
+    margin-top: 5px;
+    display: none;
+}
+
+div#auto_label {
+    font-size: 28px;
+    width: 80px;
+    line-height: 42px;
+    display: none;
+}
+
+div#auto_text {
+    display: inline-block;
+    font-size: 12px;
+    width: 120px;
+    right: 0;
+    top: 0;
+    display: none;
+}
+
+/* ----------- */
+
+a#a_lkshow {
+    display: none;
+    border: 2px solid #555;
+    border-radius: 4px;
+    text-align: center;
+    padding: 5px 0;
+    font-size: 28px;
+    margin-top: 4px;
+}
+
+/* ----------- */
+
+div#seed_control {
+    margin-top: 15px;
+    margin-left: 4px;
+    display: none;
+}
+
+div#seed_title {
+    font-size: 18px;
+    margin-bottom: 8px;
+    display: none;
+}
+
+#seed_input {
+    width: 80px;
+    height: 24px;
+    font-size: 16px;
+    border: 1px solid #555;
+    border-radius: 3px;
+    padding: 2px 4px;
+    margin-right: 8px;
+    display: none;
+}
+
+#a_apply_seed {
+    display: none;
+    background-color: #555;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 3px;
+    text-decoration: none;
+    font-size: 14px;
+    vertical-align: top;
+}
+
+#a_apply_seed:hover {
+    background-color: #777;
+    display: none;
+}
+
+div#scenes_title {
+    margin-top: 15px;
+    font-size: 18px;
+    margin-left: 4px;
+    display: none;
+}
+a.scene_button {
+    font-size: 34px;
+    display: none;
+    width: 48px;
+    height: 48px;
+    line-height: 48px;
+    text-align: center;
+    border: 2px solid #555;
+    border-radius: 4px;
+    margin-left: 2px;
+}
+
+/* ----------- */
+/* div#pom_logo {
+    position: absolute;
+    bottom: 0;
+    left: 70px;
+} */
+
+div#app_title {
+    display: none;
+}
+

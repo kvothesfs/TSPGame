@@ -1,134 +1,63 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>TSP Game</title>
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0">
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="mobile-web-app-capable" content="yes">
-
-    <link rel="stylesheet" href="engine_general.css" media="screen" />
-    <link rel="stylesheet" href="engine_mobile.css"
-        media="only screen and (max-width: 780px), screen and (max-height: 440px)" />
-    <link rel="stylesheet" href="engine.css"
-        type="text/css" media="only screen and (min-width: 781px) and (min-height: 441px)" />
-    <link rel="stylesheet" href="icon_style.css" type="text/css" media="screen" />
-
-    <script>
-        var FORCE_TOUCHMODE = false;
-    </script>
-
-    <script src="js/tsp_game.js"></script>
-    <meta charset="UTF-8">
-
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>TSP / VRP Playground</title>
+	<style>
+		:root { color-scheme: light dark; }
+		* { box-sizing: border-box; }
+		html, body { height: 100%; margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+		body { display: flex; align-items: center; justify-content: center; background: #0b0c10; color: #e6e6e6; }
+		.container { width: 100%; max-width: 960px; padding: 24px; text-align: center; }
+		.logo { width: min(60vw, 360px); height: auto; display: block; margin: 0 auto 16px auto; filter: drop-shadow(0 6px 18px rgba(0,0,0,0.35)); }
+		h1 { margin: 8px 0 16px; font-size: clamp(1.6rem, 2.4vw + 1rem, 2.4rem); letter-spacing: 0.3px; }
+		.subtitle { margin: 0 0 28px; opacity: 0.85; }
+		.grid { display: grid;grid-template-columns: repeat(2, 1fr);grid-template-rows: repeat(2, 1fr); gap: 1rem; align-items: stretch; }
+		.card { background: #1f2833; border: 1px solid #2d3a46; border-radius: 12px; padding: 18px; text-align: left; transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease; }
+		.card:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,0.25); border-color: #3a4a58; }
+		.card h2 { margin: 0 0 8px; font-size: 1.1rem; }
+		.card p { margin: 0 0 14px; opacity: 0.9; font-size: 0.95rem; }
+		.card a { display: inline-block; text-decoration: none; background: #45a29e; color: #0b0c10; padding: 10px 14px; border-radius: 8px; font-weight: 600; }
+		.footer { margin-top: 28px; font-size: 0.9rem; opacity: 0.8; }
+		@media (prefers-color-scheme: light) {
+			body { background: #f6f8fb; color: #1b1b1f; }
+			.card { background: #ffffff; border-color: #e5eaf0; }
+			.card:hover { border-color: #d7dee7; }
+			.card a { color: #ffffff; }
+		}
+	</style>
 </head>
-<body ondragstart="return false;" ondrop="return false;">
+<body>
+	<main class="container" role="main">
+		<img class="logo" src="./ncat_logo.png" alt="NCAT Logo">
+		<h1>ISE Day Routing Problems Playground</h1>
+		<p class="subtitle">Choose a demo or challenge for the Traveling Salesman (TSP) or Vehicle Routing (VRP) problems.</p>
 
-    <div id="layers"></div>
-    <div id="controls">
-        <div id="uni_logo">
-            <img src="ncat_logo_sm.png">
-        </div>
+		<section class="grid" aria-label="Available pages">
+			<article class="card">
+				<h2>TSP Demo</h2>
+				<p>Interactive demonstration of heuristics and solutions for TSP.</p>
+				<a href="./tsp_demo.html" aria-label="Open TSP Demo">Open</a>
+			</article>
+			<article class="card">
+				<h2>VRP Demo</h2>
+				<p>Hands-on demo showing VRP solution approaches.</p>
+				<a href="./vrp_demo.html" aria-label="Open VRP Demo">Open</a>
+			</article>            
+			<article class="card">
+				<h2>VRP Challenge</h2>
+				<p>Challenge mode for multi-vehicle routing with constraints.</p>
+				<a href="./vrp_challenge.html" aria-label="Open VRP Challenge">Open</a>
+			</article>
+            <article class="card">
+				<h2>TSP Challenge</h2>
+				<p>Challenge mode for the Traveling Salesman Problem.</p>
+				<a href="./tsp_challenge.html" aria-label="Open TSP Challenge">Open</a>
+			</article>
+		</section>
 
-        <div id="lk_info">
-            <div id="lk_tourinfo">
-                <div id="t_linkern">---</div>
-                <div class="subscript right"><span id="tx_best_tour">best&nbsp;tour</span></div>
-            </div>            
-        </div>
-
-        <a id="a_auto" href="#">
-            <div id="auto_label">AUTO</div>
-            <div id="auto_text">Let me improve your current tour.</div>
-        </a>
-        
-        <div id="score_info">
-            <div id="t_percent">19</div>
-            <div id="perc_sign">%</div>
-        </div>
-
-        <div id="current_info">
-            <a id="a_clear_all" href="#">
-                <div id="clear_icon"><span class="icon-close"></span></div>
-                <div id="clear_text">clear all connections</div>
-            </a>
-            <div id="length_info">
-                <div id="t_length" class="right">----</div>
-                <div class="subscript right"><span id="tx_length">tour&nbsp;length</span></div>
-            </div>
-        </div>
-        <div id="best_info">
-            <a id="a_switch_best" href="#">
-                <div id="best_icon"><span class="icon-loop"></span></div>
-                <div id="best_text">back to the best solution</div>
-            </a>
-            <a id="best_length_info" href="#">
-                <div id="t_best" class="right">---</div>
-                <div class="subscript right">
-                    <span id="tx_best">best&nbsp;so&nbsp;far</span>
-                    <span id="tx_best_s">best</span>
-                </div>
-            </a>
-        </div>
-
-        <a id="a_lkshow" href="#">SHOW SOLUTION</a>
-        
-
-        <a id="a_newgame" href="#">NEW GAME</a>
-        <div id="loc_info">
-            <a id="a_edit" href="#" class="edit_tour">
-                <div class="icon"><span class="icon-target2"></span></div>
-                <div class="subscript center"><span id="tx_edit">edit</span></div>
-            </a>
-            <a id="a_fewer" href="#">
-                <div class="icon"><span clasS="icon-minus"></span></div>
-                <div class="subscript center"><span id="tx_fewer">fewer</span></div>
-            </a>
-            <a id="a_more" href="#">
-                <div class="icon"><span clasS="icon-plus"></span></div>
-                <div class="subscript center"><span id="tx_more">more</span></div>
-            </a>
-            <div id="d_locs">
-                <div id="current_size">0</div>
-                <div class="subscript center"><span id="tx_locations">Locations</span></div>
-            </div>
-        </div>
-     
-
-        <div id="seed_control">
-            <div id="seed_title">Random Seed</div>
-            <input type="number" id="seed_input" value="1871" min="1" max="999999">
-            <a id="a_apply_seed" href="#">Apply</a>
-        </div>
-
-        <div id="scenes_title">Load Scene</div>
-        <div id="scenes">
-            <a id="a_scene_1" class="scene_button" href="#">1</a>
-            <a id="a_scene_2" class="scene_button" href="#">2</a>
-            <a id="a_scene_3" class="scene_button" href="#">3</a>
-            <a id="a_scene_4" class="scene_button" href="#">4</a>
-        </div>
-
-        <div id="copy_title">This is a copy of the original POM game.  <br> All credits go to the original authors.</div>
-
-        <!-- <div id="pom_logo">
-            <img src="ncat_logo_sm.png">
-        </div> -->
-
-        <div id="app_title">
-            ts-POM-Copy
-        </div>
-    </div>
-    <div id="footer">
-        <span id="hint_text">Connect all locations in the shortest possible way.</span>
-    </div>
-
-    <script>
-        tsp_setup();
-        tsp_init('layers');
-        tsp_language('en');
-        tsp_load_scene(2);
-    </script>
-
-
+		<!-- <p class="footer">Tip: You can bookmark this landing page for quick access.</p> -->
+	</main>
 </body>
 </html>
