@@ -30,7 +30,7 @@ div#uni_logo {
     margin: 20px 0;
 }
 
-a#a_newgame {
+a#a_newgame, a#a_leaderboard, a#a_submit {
     display: block;
     border: 2px solid #555;
     border-radius: 4px;
@@ -253,7 +253,7 @@ div#t_best {
 }
 
 /* ----------- */
-a#a_auto {
+a#a_auto, a#a_travel {
     position: relative;
     border: 2px solid #555;
     border-radius: 4px;
@@ -261,6 +261,10 @@ a#a_auto {
     height: 42px;
     padding: 0 10px;
     margin-top: 5px;
+}
+
+a#a_travel {
+    margin-top: 25px;
 }
 
 div#auto_label {

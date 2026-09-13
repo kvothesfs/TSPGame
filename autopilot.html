@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+<head>
+    <title>TSP Auto-Pilot Demo</title>
+    <meta name="viewport" content="minimal-ui, width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0">
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="engine_general.css" media="screen" />
+    <link rel="stylesheet" href="engine_mobile.css" media="only screen and (max-width: 780px), screen and (max-height: 440px)" />
+    <link rel="stylesheet" href="engine.css" type="text/css" media="only screen and (min-width: 781px) and (min-height: 441px)" />
+    <link rel="stylesheet" href="icon_style.css" type="text/css" media="screen" />
+
+    <style>
+        #autopilot_overlay {
+            position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(0,0,0,0.8); color: #fff; padding: 15px 30px;
+            font-size: 1.5em; border-radius: 10px; z-index: 10000; text-align: center;
+            font-family: sans-serif; pointer-events: none;
+        }
+    </style>
+
+    <script>
+        var FORCE_TOUCHMODE = false;
+    </script>
+    <script src="js/tsp_game.js"></script>
+</head>
+<body ondragstart="return false;" ondrop="return false;">
+
+    <div id="autopilot_overlay">Starting Auto-Pilot Demonstration...</div>
+    <div id="layers"></div>
+    <div id="controls" style="display:none;">
+        <div id="t_diff"></div>
+        <div id="t_length"></div>
+        <div id="t_best"></div>
+        <div id="t_linkern"></div>
+        <div id="auto_text"></div>
+        <div id="a_auto"></div>
+        <div id="hint_text"></div>
+        <div id="t_percent"></div>
+        <div id="perc_sign"></div>
+    </div>
+
+    <script>
+        tsp_setup();
+        tsp_init('layers');
+        
+        var msgBox = document.getElementById("autopilot_overlay");
+        
+        function runDemo(sceneId, nextCallback) {
+            msgBox.innerHTML = "Step 1: Load a predefined scenario.";
+            tsp_load_scene(sceneId);
+            
+            setTimeout(function() {
+                msgBox.innerHTML = "Step 2: Start connecting locations randomly.";
+                var nodes = engine.scene.locs;
+                var i = 0;
+                
+                var connectInterval = setInterval(function() {
+                    if (i < nodes.length - 1) {
+                        engine.tour.connect(nodes[i], nodes[i+1]);
+                        i++;
+                        engine.on_tour_change(engine.tour);
+                    } else {
+                        engine.tour.connect(nodes[nodes.length-1], nodes[0]);
+                        engine.on_tour_change(engine.tour);
+                        clearInterval(connectInterval);
+                        
+                        setTimeout(function() {
+                            msgBox.innerHTML = "Step 3: Tour complete, but very inefficient! Let's optimize.";
+                            setTimeout(function() {
+                                msgBox.innerHTML = "Step 4: Running 2-opt / Linkern optimization heuristics...";
+                                tsp_improve();
+                                
+                                setTimeout(function() {
+                                    msgBox.innerHTML = "Optimization complete! The algorithm has found a much shorter route.";
+                                    if (nextCallback) {
+                                        setTimeout(nextCallback, 4000);
+                                    }
+                                }, 4000);
+                            }, 3000);
+                        }, 2000);
+                    }
+                }, 100);
+            }, 3000);
+        }
+
+        setTimeout(function() {
+            runDemo(4, function() {
+                msgBox.innerHTML = "Let's try another one!";
+                setTimeout(function() {
+                    engine.scene.clear();
+                    runDemo(2); // run test3
+                }, 2000);
+            });
+        }, 2000);
+    </script>
+</body>
+</html>

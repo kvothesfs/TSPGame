@@ -272,22 +272,75 @@ function mouseIsOver(ev, node) {
   if (ev.clientY > offs.top + node.clientHeight) return false;
   return true;
 }
+// Seeded Random Number Generator
+var SEEDED_RANDOM = {
+  seed: 1871,
+  setSeed: function (seed) {
+    this.seed = seed;
+  },
+  random: function () {
+    // Linear Congruential Generator
+    this.seed = (this.seed * 1664525 + 1013904223) % 4294967296;
+    return this.seed / 4294967296;
+  },
+};
+
 var TRANSLATIONS = {
   de: {
-    "RESET BOARD": "NEUE KARTE",
+    "Delete, add or reroute connections to improve your tour.":
+      "Verbindungen löschen, hinzufügen oder verschieben um die Tour zu verbessern.",
+    "Connect all parts to build a single tour.":
+      "Verbinde alle Teile zu einer Gesamttour",
+    "The best tour has been found.": "Die beste Tour wurde gefunden.",
+    "Congratulations! You found the best solution.":
+      "Gratuliere! Du hast die beste Lösung gefunden.",
+    "I couldn't find any improvements!": "Leider nichts Besseres gefunden!",
+    "Looking for improvements ...": "Suche nach Verbesserungen ...",
+    "Let me improve your current tour.": "Die Tour automatisch verbessern.",
+    "Connect all locations in the shortest possible way.":
+      "Verbinde alle Orte mit dem kürzest möglichen Weg.",
+    "NEW GAME": "NEUES SPIEL",
     edit: "edit",
     fewer: "weniger",
     more: "mehr",
     Locations: "Orte",
-    Vehicles: "Fahrer",
-    depot: "Depot",
+    "best&nbsp;tour": "Beste&nbsp;Tour",
+    SHOW: "ZEIGE",
     "clear all connections": "Verbindungen löschen",
     "tour&nbsp;length": "Tour&nbsp;Länge",
-    "invalid solution": "Lösung ungültig",
-    "Solution is invalid": "Lösung ist ungültig",
-    "valid solution": "gültige Lösung",
-    "Solution is valid": "Lösung ist gültig",
-    length: "Länge",
+    "back to the best solution": "Zurück zur besten Lösung",
+    "best&nbsp;so&nbsp;far": "Bisher&nbsp;beste",
+    best: "Beste",
+    "Load Scene": "Szene laden",
+    "Mission Accomplished!": "Mission erfüllt!",
+  },
+  fi: {
+    "Delete, add or reroute connections to improve your tour.":
+      "Poista, lisää tai reititä siirtymiä uudelleen parantaaksesi reittiä.",
+    "Connect all parts to build a single tour.":
+      "Yhdistä kaikki osareitit kokonaiseksi reitiksi.",
+    "The best tour has been found.": "Paras reitti löytyi.",
+    "Congratulations! You found the best solution.":
+      "Onnittelut! Löysit parhaimman reitin.",
+    "I couldn't find any improvements!": "En löydä parantavaa siirtoa!",
+    "Looking for improvements ...": "Etsin parantavia siirtoja ...",
+    "Let me improve your current tour.": "Anna minun parantaa reittiäsi.",
+    "Connect all locations in the shortest possible way.":
+      "Yhdistä kaikki kohteet lyhimmällä mahdollisella tavalla.",
+    "NEW GAME": "UUSI PELI",
+    edit: "muuta",
+    fewer: "poista",
+    more: "lisää",
+    Locations: "Kohdetta",
+    "best&nbsp;tour": "Paras&nbsp;reitti",
+    SHOW: "NÄYTÄ",
+    "clear all connections": "Poista kaikki siirtymät",
+    "tour&nbsp;length": "Reitin&nbsp;pituus",
+    "back to the best solution": "Palauta paras tehty reitti",
+    "best&nbsp;so&nbsp;far": "Paras&nbsp;tehty",
+    best: "Paras",
+    "Load Scene": "Lataa kenttä",
+    "Mission Accomplished!": "Tehtävä suoritettu!",
   },
 };
 var LANGUAGE = "en";
@@ -316,8 +369,8 @@ var cfg = {
     autoconn: 12,
     move_inact: 12,
   },
-  edge: { width: 3, flash_width: 6 },
-  loc: { rad: 10, rad_appear: 13, rad_subtour: 12, rad_connect: 18 },
+  edge: { width: 9, flash_width: 12 },
+  loc: { rad: 15, rad_appear: 18, rad_subtour: 17, rad_connect: 23 },
   scene: { mindist: 40, margin: 30 },
   cursor: { rad: 35 },
   font: { size: 32 },
@@ -1353,11 +1406,11 @@ function GFX_SCENE(anim) {
   var rqueue = anim.Queue;
   var UNLINKED_COLOR = "#ddd";
   var SLOW_UCOLOR = "#aaa";
-  var APPEAR_COLOR = "#f00";
-  var STROKE = "#444";
+  var APPEAR_COLOR = "#004684";
+  var STROKE = "#fdb927";
   var _st_colors = [
     "#8c564b",
-    "#ff7f0e",
+    "#004684",
     "#d62728",
     "#2ca02c",
     "#1f77b4",
@@ -1977,8 +2030,8 @@ function GFX_ANIM(anim) {
     this.msg = msg;
     director.schedule(this, {
       size$: [1, 0, 2, 2],
-      color$: ["#f00", 1, "#eee", 1],
-      shadow$: ["#444", 0, "#eee", 2],
+      color$: ["#fdb927", 1, "#004684", 1],
+      shadow$: ["#004684", 0, "#fdb927", 2],
       s_offset$: [8, 0, 20, 2],
     });
     rqueue.add(this);
@@ -2265,6 +2318,75 @@ function TmpSheet(canvas, width, height) {
     if (BROKEN_CANVAS) android_clear_workaround(this.canvas);
   };
 }
+var SCENE = {
+  index: ["test2", "test3", "test4", "test5"],
+  test2: [
+    [115, 571],
+    [201, 677],
+    [301, 735],
+    [443, 765],
+    [594, 760],
+    [708, 722],
+    [800, 653],
+    [871, 567],
+    [593, 344],
+    [339, 297],
+    [300, 354],
+    [341, 402],
+    [464, 532],
+    [541, 530],
+    [640, 393],
+    [638, 295],
+    [684, 343],
+    [378, 351],
+  ],
+  test3: [
+    [100, 100],
+    [100, 200],
+    [100, 300],
+    [100, 400],
+    [100, 500],
+    [400, 150],
+    [350, 100],
+    [300, 100],
+    [250, 150],
+    [250, 250],
+    [300, 300],
+    [350, 300],
+    [400, 350],
+    [400, 450],
+    [350, 500],
+    [300, 500],
+    [250, 450],
+    [500, 100],
+    [500, 200],
+    [500, 300],
+    [500, 400],
+    [500, 500],
+    [550, 100],
+    [600, 100],
+    [650, 100],
+    [550, 300],
+    [600, 300],
+    [550, 500],
+    [600, 500],
+    [650, 500],
+  ],
+  test4: [
+    [100, 100], [150, 100], [200, 100], [250, 100], [300, 100],
+    [100, 150], [150, 150], [200, 150], [250, 150], [300, 150],
+    [100, 200], [150, 200], [200, 200], [250, 200], [300, 200],
+    [100, 250], [150, 250], [200, 250], [250, 250], [300, 250],
+    [100, 300], [150, 300], [200, 300], [250, 300], [300, 300]
+  ],
+  test5: [
+    [100,200], [150,200], [200,200], [100,250], [200,250], 
+    [100,300], [150,300], [200,300], [200,350], [200,400], [150,400], [100,400],
+    [300,400], [325,350], [350,300], [375,250], [400,200],
+    [450,250], [500,200], [500,250], [500,300], [500,350], [500,400], [450,400], [550,400],
+    [650,200], [600,250], [600,300], [600,350], [650,350], [700,350], [700,200], [700,250], [700,300], [700,400]
+  ]
+};
 var _l_id_seq = 0;
 function _location_id_seq() {
   return "_" + _l_id_seq++;
@@ -3449,6 +3571,1098 @@ Tour.prototype = {
     this._subs.remove(l);
   },
 };
+function OptLib(locs) {
+  this.locs = locs;
+  this.ldata = locs.map(function () {
+    return { dist: MAXVAL, used: false };
+  });
+  this.tour = [];
+  var N = locs.length;
+  function _dist(v1, v2) {
+    var dx = v2.x - v1.x,
+      dy = v2.y - v1.y;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+  var matrix;
+  if (typeof Float32Array === "function") matrix = new Float32Array(N * N);
+  else matrix = new Array(N * N);
+  var moff = 0;
+  for (var mi = 0; mi < N; mi++) {
+    matrix[moff + mi] = 0;
+    for (var mj = mi + 1, off2 = mj * N; mj < N; mj++, off2 += N) {
+      var d = _dist(locs[mi], locs[mj]);
+      matrix[moff + mj] = d;
+      matrix[off2 + mi] = d;
+    }
+    moff += N;
+  }
+  this.matrix = matrix;
+  this.N = N;
+  this._dist = function (i1, i2) {
+    return this.matrix[i1 * N + i2];
+  };
+}
+function cmp_far(d, best) {
+  return d > best;
+}
+function cmp_near(d, best) {
+  return d < best;
+}
+OptLib.prototype = {
+  length: function () {
+    var t = this.tour,
+      n = t.length,
+      sum = 0,
+      N = this.N;
+    for (var i = 0; i < n; i++) sum += this._dist(t[i], t[(i + 1) % N]);
+    return sum;
+  },
+  construct: function (mode, initial, firstidx) {
+    var locs = this.locs;
+    if (this.N <= 3) {
+      var ix = 0;
+      this.tour = this.locs.map(function () {
+        return ix++;
+      });
+      return this.tour;
+    }
+    if (initial && initial.length >= 2) {
+      for (var i = 0; i < initial.length; i++)
+        for (var j = 0; j < locs.length; j++)
+          if (initial[i] === locs[j]) {
+            this.tour.push(j);
+            this.ldata[j].used = true;
+            break;
+          }
+      if (this.tour.length === this.N) return this.tour;
+      this._reset_dist();
+      switch (mode) {
+        case "near":
+        case "nneigh":
+          this._reconstruct(cmp_near);
+          return this.tour;
+        case "far":
+          this._reconstruct(cmp_far);
+          return this.tour;
+        default:
+      }
+    } else
+      switch (mode) {
+        case "nneigh":
+          this._nearest_neighbors(firstidx);
+          return this.tour;
+        case "near":
+          this._construct(cmp_near);
+          return this.tour;
+        case "far":
+          this._construct(cmp_far);
+          return this.tour;
+        default:
+      }
+  },
+  optimize_step: function () {
+    if (this.N <= 3) return;
+    var nt = LinKern(this.matrix, this.tour, "step");
+    if (nt) {
+      this.tour = nt;
+      return this.tour;
+    }
+    nt = X2Opt(this.matrix, this.tour);
+    if (nt) {
+      this.tour = nt;
+      return this.tour;
+    }
+    nt = X1Opt(this.matrix, this.tour);
+    if (nt) {
+      this.tour = nt;
+      return this.tour;
+    }
+  },
+  optimize_all: function (callback) {
+    if (this.N <= 3) return;
+    var nt = LinKern(this.matrix, this.tour, "full", callback);
+    if (nt) {
+      this.tour = nt;
+      return this.tour;
+    }
+  },
+  optimizer: function () {
+    if (this.N <= 3) return;
+    return new LinKern(this.matrix, this.tour, "object");
+  },
+  _calc_dist: function (lidx) {
+    var N = this.N;
+    var min = MAXVAL;
+    for (var i = 0; i < N; ++i) {
+      if (!this.ldata[i].used) continue;
+      var d = this._dist(i, lidx);
+      if (d < min) min = d;
+    }
+    return min;
+  },
+  _reset_dist: function () {
+    var N = this.N;
+    for (var i = 0; i < N; ++i) {
+      if (this.ldata[i].used) continue;
+      this.ldata[i].dist = this._calc_dist(i);
+    }
+  },
+  _nearest_neighbors: function (firstidx) {
+    var locs = this.locs,
+      used = {},
+      lidx = firstidx;
+    used[locs[firstidx].id] = 1;
+    this.tour = [lidx];
+    while (this.tour.length != locs.length) {
+      lidx = this._find_neighbor(lidx, used);
+      this.tour.push(lidx);
+      used[locs[lidx].id] = 1;
+    }
+  },
+  _find_neighbor: function (idx, used) {
+    var locs = this.locs,
+      min_d = MAXVAL,
+      best;
+    for (var i = 0; i < locs.length; i++) {
+      if (used[locs[i].id]) continue;
+      var d = this._dist(i, idx);
+      if (d < min_d) {
+        min_d = d;
+        best = i;
+      }
+    }
+    return best;
+  },
+  _construct: function (cmp) {
+    this.tour = this._find_first(cmp);
+    var ld = this.ldata,
+      t = this.tour;
+    ld[t[0]].used = true;
+    this._update_dist(t[0], cmp);
+    ld[t[1]].used = true;
+    var next = this._update_dist(t[1], cmp);
+    while (next >= 0) {
+      this._cheapest_insert(next);
+      next = this._update_dist(next, cmp);
+    }
+  },
+  _reconstruct: function (cmp) {
+    var next = this._find_best(cmp);
+    while (next >= 0) {
+      this._cheapest_insert(next);
+      next = this._update_dist(next, cmp);
+    }
+  },
+  _find_best: function (cmp) {
+    var idx = -1,
+      best;
+    for (var i = 0; i < this.locs.length; i++) {
+      if (this.ldata[i].used) continue;
+      var dist = this.ldata[i].dist;
+      if (best === undefined || cmp(dist, best)) {
+        best = dist;
+        idx = i;
+      }
+    }
+    return idx;
+  },
+  _find_first: function (cmp) {
+    var result = [],
+      best,
+      N = this.N;
+    for (var i = 0; i < N; ++i)
+      for (var j = i + 1; j < N; ++j) {
+        var d = this._dist(i, j);
+        if (best === undefined || cmp(d, best)) {
+          best = d;
+          result = [i, j];
+        }
+      }
+    return result;
+  },
+  _update_dist: function (lidx, cmp) {
+    var best,
+      res = -1,
+      ld = this.ldata,
+      N = this.N;
+    for (var i = 0; i < N; i++) {
+      if (ld[i].used) continue;
+      var d = this._dist(lidx, i);
+      if (d < ld[i].dist) ld[i].dist = d;
+      if (best === undefined || cmp(ld[i].dist, best)) {
+        best = ld[i].dist;
+        res = i;
+      }
+    }
+    return res;
+  },
+  _cheapest_insert: function (lidx) {
+    var t = this.tour;
+    if (t.length < 3) {
+      t[t.length] = lidx;
+      this.ldata[lidx].used = true;
+      return;
+    }
+    var min = this._insert_delta(t[t.length - 1], t[0], lidx);
+    var pos = t.length;
+    for (var i = 1; i < t.length; i++) {
+      var diff = this._insert_delta(t[i - 1], t[i], lidx);
+      if (diff < min) {
+        min = diff;
+        pos = i;
+      }
+    }
+    this._insert(lidx, pos);
+  },
+  _insert_delta: function (ix1, ix2, il) {
+    return this._dist(ix1, il) + this._dist(ix2, il) - this._dist(ix1, ix2);
+  },
+  _insert: function (lidx, pos) {
+    this.tour.splice(pos, 0, lidx);
+    this.ldata[lidx].used = true;
+  },
+};
+function X1Opt(matrix, tour) {
+  var N = tour.length;
+  function _dist(i1, i2) {
+    return matrix[tour[i1] * N + tour[i2]];
+  }
+  function _find_1opt() {
+    if (N < 4) return;
+    var best = -1e-6;
+    var res;
+    for (var i = 0; i < N; i++)
+      for (var j = 0; j < N; j++) {
+        if (i == j) continue;
+        var i_p = (i - 1 + N) % N;
+        var i_n = (i + 1) % N;
+        var j_p = (j - 1 + N) % N;
+        var j_n = (j + 1) % N;
+        var diff;
+        if (i_n == j) {
+          var pre = _dist(i_p, i) + _dist(j, j_n);
+          var post = _dist(i_p, j) + _dist(i, j_n);
+          diff = post - pre;
+        } else {
+          var pre = _dist(i_p, i) + _dist(i, i_n) + _dist(j_p, j);
+          var post = _dist(i_p, i_n) + _dist(j_p, i) + _dist(i, j);
+          diff = post - pre;
+        }
+        if (diff < best) return [i, j];
+      }
+    return res;
+  }
+  function _do1opt(tour, pair) {
+    var src = pair[0];
+    var hopser = tour.splice(src, 1);
+    var dest = pair[1];
+    if (dest > src + 1) dest--;
+    tour.splice(dest, 0, hopser[0]);
+  }
+  var pair = _find_1opt();
+  if (pair) {
+    var res = tour.slice();
+    _do1opt(res, pair);
+    return res;
+  }
+}
+function X2Opt(matrix, tour) {
+  var N = tour.length;
+  function _dist(i1, i2) {
+    return matrix[tour[i1] * N + tour[i2]];
+  }
+  function _find_2opt() {
+    var best = 0,
+      res;
+    if (N < 4) return;
+    for (var i = 1; i < N; i++)
+      for (var j = i + 1; j < N; j++) {
+        var pre = _dist(i - 1, i) + _dist(j, (j + 1) % N);
+        var post = _dist(i - 1, j) + _dist((j + 1) % N, i);
+        var diff = post - pre;
+        if (diff < best - 1e-7) return [i, j];
+      }
+    return res;
+  }
+  function _swap(t, x1, x2) {
+    var tmp = t[x1];
+    t[x1] = t[x2];
+    t[x2] = tmp;
+  }
+  function _do2opt(tour, pair) {
+    var lo = pair[0];
+    var hi = pair[1];
+    while (lo < hi) {
+      _swap(tour, lo, hi % N);
+      lo++;
+      hi--;
+    }
+  }
+  var pair = _find_2opt();
+  if (pair) {
+    var res = tour.slice();
+    _do2opt(res, pair);
+    return res;
+  }
+}
+function LinKern(matrix, tour, mode, updater) {
+  var EPS = 1e-5;
+  var N = tour.length;
+  var breadth_a = 4;
+  var breadth_b = 4;
+  var breadth_d = 2;
+  var MAX_LEVEL = 25;
+  function breadth(k) {
+    switch (k) {
+      case 1:
+        return 4;
+      case 2:
+        return 3;
+      case 3:
+        return 2;
+      default:
+        return 1;
+    }
+  }
+  function tour_length(t) {
+    var sum = 0,
+      n = t.length;
+    for (var i = 0; i < n; i++) sum += matrix[t[i] * N + t[(i + 1) % n]];
+    return sum;
+  }
+  function improve_matches(t1, t2, g) {
+    return Math.abs(tour_length(t1) - tour_length(t2) - g) < EPS;
+  }
+  function unscramble_edge(x) {
+    return [x % N, Math.floor(x / N)];
+  }
+  function step(tour, base, level, delta, history, type) {
+    if (level > MAX_LEVEL) return;
+    function edge_hash(x1, x2) {
+      return tour[x1] < tour[x2]
+        ? tour[x1] * N + tour[x2]
+        : tour[x2] * N + tour[x1];
+    }
+    function edge_hash_v(v1, v2) {
+      return v1 < v2 ? v1 * N + v2 : v2 * N + v1;
+    }
+    function c(a, b) {
+      return matrix[tour[a] * N + tour[b]];
+    }
+    function next(x) {
+      return (x + 1) % N;
+    }
+    function prev(x) {
+      return (x - 1 + N) % N;
+    }
+    function promising(base, a) {
+      var g = delta + c(base, next(base)) - c(next(base), a);
+      return g > EPS;
+    }
+    function mm_promising(base, a) {
+      var g = delta + c(base, next(base)) - c(base, a);
+      return g > EPS;
+    }
+    function lk_order(base) {
+      var list = [];
+      for (var a = (base + 3) % N; a != base; a = next(a))
+        if (promising(base, a))
+          list.push({
+            v: a,
+            w: c(prev(a), a) - c(next(base), a),
+            trans: [prev(a), next(base), 1, a, base, 0],
+            op: "LK",
+            type: 1,
+          });
+      for (var a = (base + 2) % N; a != prev(base); a = next(a))
+        if (mm_promising(base, a))
+          list.push({
+            v: a,
+            w: c(a, next(a)) - c(base, a),
+            trans: [next(base), a, 0, base, next(a), 1],
+            op: "MM",
+            type: 2,
+          });
+      list.sort(function (a, b) {
+        return b.w - a.w;
+      });
+      var res = [];
+      for (var i = 0; i < list.length; i++) {
+        var x = list[i];
+        if (!test_changed_edges(x.trans)) continue;
+        res.push(x);
+        if (res.length >= breadth(level)) break;
+      }
+      return res;
+    }
+    function b_promising(a, b, base) {
+      var g = c(a, next(a)) + c(base, next(base)) - c(base, a) - c(next(a), b);
+      return g > EPS;
+    }
+    function d_promising(a, b, b1, d, base) {
+      var g =
+        c(b, b1) +
+        c(base, next(base)) -
+        c(next(base), a) +
+        c(a, next(a)) -
+        c(next(a), b) -
+        c(b1, d);
+      return g > EPS;
+    }
+    function sort_and_limit(list, breadth) {
+      list.sort(function (a, b) {
+        return b.w - a.w;
+      });
+      if (list.length > breadth) list.splice(breadth, list.length - breadth);
+    }
+    function a_order(base) {
+      var list = [];
+      for (var a = (base + 2) % N; a != prev(base); a = next(a))
+        if (promising(base, a))
+          list.push({ v: a, w: c(a, next(a)) - c(base, a) });
+      sort_and_limit(list, breadth_a);
+      return list;
+    }
+    function b_order(a, base) {
+      var list = [];
+      for (var b = (base + 2) % N; b != base; b = next(b)) {
+        if (b === a) continue;
+        if (b === next(a)) continue;
+        if (prev(b) === next(a)) continue;
+        if (b_promising(a, b, base)) {
+          list.push({
+            pair: [b, next(b)],
+            w: c(next(b), b) - c(next(a), b),
+            trans: [next(b), a, 0, next(base), b, 0, next(a), base, 0],
+            op: "B1",
+            type: 1,
+          });
+          if (prev(b) != next(base))
+            list.push({
+              pair: [b, prev(b)],
+              w: c(prev(b), b) - c(next(a), b),
+              trans: [prev(b), next(base), 1, a, b, 1, next(a), base, 0],
+              op: "B2",
+              type: 2,
+            });
+        }
+      }
+      sort_and_limit(list, breadth_b);
+      return list;
+    }
+    function d_order(b, b1, base, a) {
+      var b_type = 1;
+      if (b1 === prev(b)) b_type = 2;
+      var list = [];
+      for (var d = (base + 2) % N; d != a; d = next(d))
+        if (d_promising(a, b, b1, d, base)) {
+          if (b_type === 2)
+            list.push({
+              pair: [d, next(d)],
+              w: c(next(d), d) - c(b1, d),
+              trans: [
+                next(d),
+                a,
+                0,
+                next(base),
+                d,
+                0,
+                b1,
+                next(a),
+                1,
+                b,
+                base,
+                0,
+              ],
+              op: "D1",
+              type: 1,
+            });
+          if (next(base) != prev(d)) {
+            var xb, xb1;
+            if (b_type === 1) {
+              if (b1 === base) continue;
+              xb1 = b1;
+              xb = b;
+            } else {
+              xb1 = b;
+              xb = b1;
+            }
+            list.push({
+              pair: [d, prev(d)],
+              w: c(prev(d), d) - c(b1, d),
+              trans: [
+                prev(d),
+                next(base),
+                1,
+                a,
+                d,
+                1,
+                xb,
+                next(a),
+                1,
+                xb1,
+                base,
+                0,
+              ],
+              op: "D2",
+              type: 2,
+            });
+          }
+        }
+      sort_and_limit(list, breadth_d);
+      return list;
+    }
+    function in_order(a, b, c) {
+      if (a < c) return a < b && b < c;
+      return a < b || b < c;
+    }
+    function test_changed_edges(seq) {
+      for (var i = 0, n = seq.length; i < n; i += 3) {
+        var src = seq[i],
+          dst = seq[i + 1],
+          back = seq[i + 2],
+          ahead = seq[(i + 3) % n];
+        var removed = back
+          ? edge_hash(dst, prev(dst))
+          : edge_hash(src, prev(src));
+        if (history[removed]) return false;
+        if (i + 3 < n) {
+          var added = edge_hash(dst, ahead);
+          if (history[added]) return false;
+        }
+      }
+      return true;
+    }
+    function changed_edges(seq) {
+      var linked = [],
+        killed = [];
+      for (var i = 0, n = seq.length; i < n; i += 3) {
+        var src = seq[i],
+          dst = seq[i + 1],
+          back = seq[i + 2],
+          ahead = seq[(i + 3) % n];
+        killed.push(
+          back ? edge_hash(dst, prev(dst)) : edge_hash(src, prev(src)),
+        );
+        if (i + 3 < n) linked.push(edge_hash(dst, ahead));
+      }
+      return { add: linked, rem: killed };
+    }
+    function push_changes(op, chg) {
+      var add = chg.add,
+        rem = chg.rem;
+      for (var i = 0, n = add.length; i < n; i++) history[add[i]] = 1;
+      for (var i = 0, n = rem.length; i < n; i++) history[rem[i]] = 2;
+    }
+    function pop_changes(chg) {
+      var add = chg.add,
+        rem = chg.rem;
+      for (var i = 0, n = add.length; i < n; i++) delete history[add[i]];
+      for (var i = 0, n = rem.length; i < n; i++) delete history[rem[i]];
+    }
+    function transform_gain(seq) {
+      var gain = 0;
+      for (var i = 0, n = seq.length; i < n; i += 3) {
+        var src = seq[i],
+          dst = seq[i + 1],
+          back = seq[i + 2],
+          ahead = seq[(i + 3) % n];
+        gain += back ? c(dst, prev(dst)) : c(src, prev(src));
+        gain -= c(dst, ahead);
+      }
+      return gain;
+    }
+    function transform(op, seq) {
+      var res = new Array(tour.length);
+      var oi = 0;
+      for (var i = 0, n = seq.length; i < n; i += 3) {
+        var x = seq[i],
+          dst = seq[i + 1],
+          back = seq[i + 2];
+        res[oi++] = tour[x];
+        if (back)
+          while (x != dst) {
+            x = prev(x);
+            res[oi++] = tour[x];
+          }
+        else
+          while (x != dst) {
+            x = next(x);
+            res[oi++] = tour[x];
+          }
+      }
+      var g0 = transform_gain(seq);
+      return { g: g0, tour: res };
+    }
+    function transform_step(op, seq, newbase, level) {
+      var dat = transform(op, seq);
+      var changes = changed_edges(seq);
+      push_changes(op, changes);
+      if (delta + dat.g > EPS) {
+        history[edge_hash_v(dat.tour[N - 1], dat.tour[0])] = 1;
+        return { delta: delta + dat.g, tour: dat.tour, level: level, op: "#" };
+      }
+      var subres = step(
+        dat.tour,
+        newbase,
+        level + 1,
+        delta + dat.g,
+        history,
+        "default",
+      );
+      if (subres) return subres;
+      pop_changes(changes);
+    }
+    if (type === "default") {
+      var list = lk_order(base);
+      for (var i = 0; i < list.length; i++) {
+        var a = list[i].v;
+        var trans = list[i].trans,
+          op = list[i].op;
+        var res = transform_step(op, trans, N - 1, level);
+        if (res) {
+          res.op = op + "," + res.op;
+          return res;
+        }
+      }
+    } else {
+      var a_list = a_order(base);
+      for (var i = 0; i < a_list.length; i++) {
+        var a = a_list[i].v;
+        var b_list = b_order(a, base);
+        for (var j = 0; j < b_list.length; j++) {
+          var b = b_list[j].pair[0];
+          var b1 = b_list[j].pair[1];
+          if (in_order(next(base), b, a)) {
+            var trans = b_list[j].trans,
+              op = b_list[j].op;
+            var res = transform_step(op, trans, N - 1, 2);
+            if (res) {
+              res.op = op + "," + res.op;
+              return res;
+            }
+          } else {
+            var d_list = d_order(b, b1, base, a);
+            for (var k = 0; k < d_list.length; k++) {
+              var trans = d_list[k].trans,
+                op = d_list[k].op;
+              var res = transform_step(op, trans, N - 1, 3);
+              if (res) {
+                res.op = op + "," + res.op;
+                return res;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  function kick(tour, mark, mode) {
+    function c(a, b) {
+      return matrix[tour[a] * N + tour[b]];
+    }
+    function next(x) {
+      return (x + 1) % N;
+    }
+    function prev(x) {
+      return (x - 1 + N) % N;
+    }
+    function transform(seq) {
+      var res = new Array(tour.length);
+      var oi = 0;
+      for (var i = 0, n = seq.length; i < n; i += 3) {
+        var x = seq[i],
+          dst = seq[i + 1],
+          back = seq[i + 2];
+        res[oi++] = tour[x];
+        if (back)
+          while (x != dst) {
+            x = prev(x);
+            res[oi++] = tour[x];
+          }
+        else
+          while (x != dst) {
+            x = next(x);
+            res[oi++] = tour[x];
+          }
+      }
+      return res;
+    }
+    function random_select(arr, n) {
+      var L = arr.length;
+      if (L == n) return arr.slice();
+      var mark = new Array(L);
+      var res = [];
+      for (var i = 0; i < n; i++) {
+        var idx = Math.floor(Math.random() * L);
+        while (mark[idx]) idx = (idx + 1) % L;
+        mark[idx] = 1;
+        res.push(arr[idx]);
+      }
+      return res;
+    }
+    function kick_initial(n) {
+      return Math.floor(Math.random() * N);
+    }
+    function pick_from_list(v, list) {
+      var pos = 0,
+        L = list.length;
+      while (pos < L && list[pos] < v) pos++;
+      pos = pos % L;
+      var w = [v];
+      for (var i = 1; i < 4; i++) {
+        w[i] = list[pos];
+        pos = (pos + 1) % L;
+        if (w[i] === next(w[i - 1])) {
+          w[i] = list[pos++];
+          pos = (pos + 1) % L;
+        }
+      }
+      return w;
+    }
+    function pick_random_kick() {
+      var idxs = [];
+      for (var i = 0; i < N; i++) idxs.push(i);
+      var list = random_select(idxs, 8).sort(function (a, b) {
+        return a - b;
+      });
+      var v = list.shift();
+      return pick_from_list(v, list);
+    }
+    function pick_long_kick() {
+      var weights = [];
+      for (var i = 0; i < N; i++)
+        weights.push({ tidx: i, weight: c(i, next(i)) });
+      var list = weights
+        .sort(function (a, b) {
+          return b.weight - a.weight;
+        })
+        .map(function (x) {
+          return x.tidx;
+        });
+      list = list.sort(function (a, b) {
+        return a - b;
+      });
+      if (list > 8) list.splice(8, list.length - 8);
+      var v = list.shift();
+      return pick_from_list(v, list);
+    }
+    function pick_close_kick(n1, nalpha) {
+      var v = kick_initial(n1);
+      var idxs = [];
+      for (var i = 0; i < tour.length; i++) idxs.push(i);
+      var cands = random_select(idxs, nalpha);
+      var dists = cands
+        .map(function (i) {
+          return { idx: i, dist: c(i, v) };
+        })
+        .sort(function (a, b) {
+          return a.dist - b.dist;
+        });
+      if (dists[0].idx === v) dists.shift();
+      var L = 7;
+      dists.splice(L, dists.length - L);
+      var list = dists
+        .sort(function (a, b) {
+          return a.idx - b.idx;
+        })
+        .map(function (x) {
+          return x.idx;
+        });
+      return pick_from_list(v, list);
+    }
+    var w;
+    switch (mode) {
+      case "close":
+        var alpha = 0.3;
+        var nalpha = Math.floor(tour.length * alpha);
+        if (nalpha < 8) nalpha = 8;
+        w = pick_close_kick(nalpha, nalpha);
+        break;
+      case "random":
+        w = pick_random_kick();
+        break;
+      case "long":
+        w = pick_long_kick();
+        break;
+      default:
+    }
+    if (mark)
+      for (var i = 0; i < w.length; i++) {
+        mark[tour[w[i]]] = 0;
+        mark[tour[next(w[i])]] = 0;
+      }
+    return transform([
+      next(w[0]),
+      w[1],
+      0,
+      next(w[3]),
+      w[0],
+      0,
+      next(w[2]),
+      w[3],
+      0,
+      next(w[1]),
+      w[2],
+      0,
+    ]);
+  }
+  function one_step(v) {
+    var res;
+    var hist = {};
+    res = step(tour, v, 1, 0, hist, "default");
+    if (res) {
+      res.hist = hist;
+      return res;
+    }
+    res = step(tour, v, 1, 0, hist, "alternate");
+    if (res) {
+      res.hist = hist;
+      return res;
+    }
+  }
+  function unmark_step_hist(res, mark) {
+    for (var edge in res.hist) {
+      var pts = unscramble_edge(edge);
+      mark[pts[0]] = 0;
+      mark[pts[1]] = 0;
+    }
+  }
+  function algo_loop(mark) {
+    var go;
+    var iteration = 0;
+    do {
+      go = 0;
+      for (var i = 0; i < tour.length; i++) {
+        var v = tour[i];
+        if (mark[v]) continue;
+        go++;
+        var res = one_step(i);
+        if (res) {
+          unmark_step_hist(res, mark);
+          tour = res.tour;
+          break;
+        } else mark[v] = 1;
+      }
+      iteration++;
+    } while (go);
+  }
+  function brute_step() {
+    var start = Math.floor(Math.random() * N);
+    for (var i = (start + 1) % N; i != start; i = (i + 1) % N) {
+      var res = one_step(i);
+      if (res) return res.tour;
+    }
+  }
+  function postprocess(tour) {
+    var nt;
+    while ((nt = X2Opt(matrix, tour))) tour = nt;
+    while ((nt = X1Opt(matrix, tour))) tour = nt;
+    return tour;
+  }
+  function chained_lk() {
+    var iters = 0;
+    algo_loop([]);
+    iters++;
+    var best = tour.slice();
+    if (updater) updater(best);
+    var max_nop0 = 5;
+    while (max_nop0) {
+      max_nop0--;
+      tour.reverse();
+      tour = kick(tour, null, "random");
+      var mark = [];
+      algo_loop(mark);
+      iters++;
+      if (tour_length(tour) < tour_length(best)) {
+        best = tour.slice();
+        max_nop0 = 3;
+        if (updater) updater(best);
+      }
+      var max_nop = 2;
+      while (max_nop) {
+        tour = kick(tour, mark, "close");
+        algo_loop(mark);
+        iters++;
+        if (tour_length(tour) < tour_length(best)) {
+          best = tour.slice();
+          max_nop = 2;
+          max_nop0 = 3;
+          if (updater) updater(best);
+        } else max_nop--;
+      }
+    }
+    return postprocess(best);
+  }
+  switch (mode) {
+    case "step":
+      return brute_step();
+    case "full":
+      return chained_lk();
+    case "object":
+      break;
+    default:
+  }
+  var _chain_state = {
+    mark: [],
+    best: tour.slice(),
+    len: tour_length(tour),
+    iterations: 0,
+    kicks: ["long", "random", "random", "long", "random", "best", "random"],
+  };
+  this.chain_step = function () {
+    var mark = _chain_state.mark;
+    var stepped = false;
+    var ncands;
+    do {
+      ncands = 0;
+      for (var i = 0; i < N; i++)
+        if (!mark[tour[i]]) {
+          ncands++;
+          var res = one_step(i);
+          if (res) {
+            unmark_step_hist(res, mark);
+            tour = res.tour;
+            stepped = true;
+          } else mark[tour[i]] = 1;
+          break;
+        }
+    } while (!stepped && ncands);
+    var newlen = tour_length(tour);
+    if (newlen < _chain_state.len) {
+      _chain_state.best = tour.slice();
+      _chain_state.len = newlen;
+    }
+    if (stepped) return;
+    tour.reverse();
+    var m = _chain_state.kicks;
+    var meth = m[_chain_state.iterations % m.length];
+    _chain_state.iterations++;
+    if (tour.length >= 8) {
+      switch (meth) {
+        case "long":
+          tour = kick(tour, false, "long");
+          break;
+        case "random":
+          tour = kick(tour, false, "random");
+          break;
+        case "close":
+          tour = kick(tour, false, "close");
+          break;
+        case "best":
+          tour = kick(_chain_state.best, false, "random");
+          break;
+        default:
+      }
+      _chain_state.mark = [];
+    }
+  };
+  this.chain_tour = function () {
+    return _chain_state.best;
+  };
+  this.chain_len = function () {
+    return _chain_state.len;
+  };
+  this.chain_iterations = function () {
+    return _chain_state.iterations;
+  };
+  this.chain_postprocess = function () {
+    _chain_state.best = postprocess(_chain_state.best);
+    _chain_state.len = tour_length(_chain_state.best);
+  };
+}
+function OptWorker(on_step) {
+  var lkopt;
+  var lklen;
+  var stop_time;
+  function opt_step() {
+    if (!lkopt) return;
+    if (lkopt.chain_iterations() < 20 && Date.now() < stop_time) {
+      lkopt.chain_step();
+      if (lkopt.chain_len() < lklen) {
+        var tour = lkopt.chain_tour();
+        lklen = lkopt.chain_len();
+        on_step(tour);
+      }
+      setTimeout(opt_step, 0);
+    } else {
+      lkopt.chain_postprocess();
+      if (lkopt.chain_len() < lklen) {
+        var tour = lkopt.chain_tour();
+        lklen = lkopt.chain_len();
+        on_step(tour);
+      }
+      lkopt = undefined;
+      lklen = MAXVAL;
+      stop_time = 0;
+    }
+  }
+  this.set_locations = function (locs) {
+    stop_time = Date.now() + 5e3;
+    var opt = new OptLib(locs);
+    var tour = opt.construct("far");
+    on_step(tour);
+    lkopt = opt.optimizer();
+    if (lkopt) {
+      lklen = lkopt.chain_len();
+      setTimeout(opt_step, 0);
+    }
+  };
+  this.stop = function () {
+    lkopt = undefined;
+    lklen = MAXVAL;
+    stop_time = 0;
+  };
+  this.postMessage = function (data) {
+    if (typeof data === "string" && data == "stop") this.stop();
+    else this.set_locations(data);
+  };
+}
+var _lk_tour;
+var OPT = (function () {
+  var lk_handle;
+  var worker;
+  function worker_tour(t) {
+    if (t.length != engine.scene.locs.length) return;
+    if (_lk_tour) _lk_tour.close();
+    _lk_tour = create_tour(engine.scene, t);
+    _board.lk_length(_lk_tour.length());
+  }
+  if (typeof Worker !== "undefined") {
+    worker = new Worker("js/opt_worker.js");
+    worker.onmessage = function (msg) {
+      worker_tour(msg.data);
+    };
+  } else worker = new OptWorker(worker_tour);
+  function schedule_linkern() {
+    stop_linkern();
+    if (lk_handle) clearTimeout(lk_handle);
+    lk_handle = setTimeout(function () {
+      update_linkern(engine.scene.locs);
+    }, 150);
+  }
+  function stop_linkern() {
+    if (!worker) return;
+    worker.postMessage("stop");
+  }
+  function update_linkern(locs) {
+    var msg = [];
+    for (var i = 0; i < locs.length; i++) {
+      var l = locs[i];
+      msg.push({ x: l.x, y: l.y, id: l.id });
+    }
+    worker.postMessage(msg);
+  }
+  return { schedule: schedule_linkern, stop: stop_linkern };
+})();
+function schedule_linkern() {
+  if (_lk_tour) _lk_tour.close();
+  _lk_tour = undefined;
+  OPT.schedule();
+}
+function stop_linkern() {
+  OPT.stop();
+}
 var GenericActor = {
   _init: function () {
     this.state = undefined;
@@ -3961,59 +5175,51 @@ ActorStateCreateLoc.prototype = {
     } catch (x) {}
   },
 };
-function DepotActor(scene, callback) {
-  this.scene = scene;
-  this.callback = callback;
-  this._init();
-}
-DepotActor.prototype = {
-  _activation_state: function (pos) {
-    return new ActorStateCreateDepot(this, pos);
-  },
-};
-mixin(GenericActor, DepotActor.prototype);
-function ActorStateCreateDepot(actor, pos) {
-  this.name = "CREATE_DEPOT";
-  this.pos = pos;
-  this.actor = actor;
-  this.cursor = new gfx.cursor.Create(pos);
-  this.move(pos);
-}
-ActorStateCreateDepot.prototype = {
-  release: function (pos) {
-    if (!pos) return;
-    try {
-      var loc = this.actor.scene.nearest_rad(pos, cfg.scene.mindist);
-      if (!loc) {
-        var sc = this.actor.scene;
-        sc.remove_depots();
-        sc.add_depot(pos.x, pos.y);
-        this.actor.events.notify("add", { type: "depot" });
-        setTimeout(this.actor.callback, 0);
-      }
-    } catch (x) {}
-  },
-};
-mixin(ActorStateCreateLoc.prototype, ActorStateCreateDepot.prototype);
-var MAX_VEHICLES = 4;
-function VRPBoard(anim, color_func) {
+function Scoreboard(anim) {
   this.director = anim.Director;
   this.rqueue = anim.Queue;
-  this.color_func = color_func;
+  this.n_diff = $("t_diff");
   this.n_length = $("t_length");
-  this.n_stats = $("d_stats");
-  this.n_valid = $("d_valid");
-  this.n_valid_t = $("tx_valid");
-  this.n_valid_s = $("tx_valid_s");
+  this.n_best = $("t_best");
+  this.n_lk_length = $("t_linkern");
+  this.n_auto_text = $("auto_text");
+  this.n_auto = $("a_auto");
+  this.n_hint = $("hint_text");
+  this.n_percent = $("t_percent");
+  this.n_percent_sign = $("perc_sign");
+  this.best = undefined;
+  this.last_complete = 0;
   this.current_length = 0;
+  this.current_lk_length = 0;
+  this.lk_len = 0;
+  this.current_diff = 0;
   this.score_color = "#000";
   this.diff_color = "#eee";
-  this.num_vehicles = 2;
+  this.auto_color = undefined;
+  this.percent_color = "#aaa";
+  this.current_percent = 0;
   this.level = 10;
   this.current_actor = "tour";
   this.scale = 1e3 / 3 / max(screen.width, screen.height);
 }
-VRPBoard.prototype = {
+function scale_percent(v, x1, x2) {
+  return (x2 - v) / (x2 - x1);
+}
+function calc_percent(v, m) {
+  if (v > 2 * m) return 0.01;
+  if (v > 1.25 * m) return scale_percent(v, 1.25 * m, 2 * m) * 0.19 + 0.01;
+  if (v > 1.05 * m) return scale_percent(v, 1.05 * m, 1.25 * m) * 0.75 + 0.2;
+  return scale_percent(v, m, 1.05 * m) * 0.05 + 0.95;
+}
+Scoreboard.prototype = {
+  set_percent: function (p) {
+    if (isAndroid() || VERY_SLOW) this.current_percent = p;
+    else {
+      this.director.cancel(this, "current_percent");
+      this.director.schedule(this, { current_percent: [0, p, 1] });
+    }
+    this.rqueue.add(this);
+  },
   length: function (x) {
     if (isAndroid() || VERY_SLOW) this.current_length = x;
     else {
@@ -4021,62 +5227,104 @@ VRPBoard.prototype = {
       this.director.schedule(this, { current_length: [0, x, 1] });
     }
     this.rqueue.add(this);
+    this.auto_ready();
+  },
+  lk_length: function (x) {
+    this.lk_len = x;
+    var c = this.current_lk_length;
+    var t = (Math.abs(c - x) / 1e3) * this.scale;
+    if (isAndroid() || VERY_SLOW) this.current_lk_length = x;
+    else {
+      this.director.cancel(this, "current_lk_length");
+      this.director.schedule(this, { current_lk_length: [0, x, t] });
+    }
+    this.rqueue.add(this);
+    if (this.last_complete) this.update_percent(this.last_complete);
+  },
+  update_percent: function (x) {
+    var perc = calc_percent(x, this.lk_len);
+    if (
+      Math.floor(x * this.scale) > Math.floor(this.lk_len * this.scale) &&
+      perc > 0.99
+    )
+      perc = 0.99;
+    this.set_percent(perc);
+  },
+  complete: function (x) {
+    var diff =
+      Math.floor(x * this.scale) - Math.floor(this.last_complete * this.scale);
+    this.last_complete = x;
+    this.percent_color = "black";
+    this.update_percent(x);
+    this.n_hint.innerHTML = tr(
+      "Delete, add or reroute connections to improve your tour.",
+    );
+    this.rqueue.add(this);
+    return diff;
+  },
+  incomplete: function (x) {
+    this.percent_color = "#aaa";
+    this.n_hint.innerHTML = tr("Connect all parts to build a single tour.");
+    this.gave_up = 0;
+    this.rqueue.add(this);
+  },
+  score_state: function (x) {
+    if (Math.floor(x * this.scale) <= Math.floor(this.lk_len * this.scale)) {
+      if (!this.game_finished) {
+        setTimeout(function () {
+          new gfx.anim.MissionAccomplished(tr("Mission Complete!"));
+        }, 0.5);
+        this.level += 5;
+        if (this.level > 99) this.level = 99;
+      }
+      this.n_auto_text.innerHTML = tr("The best tour has been found.");
+      this.n_hint.innerHTML = tr(
+        "Congratulations! You found the best solution.",
+      );
+      this.game_finished = 1;
+      this.gave_up = 1;
+      this.auto_flash("#0f0");
+    }
+  },
+  test_score: function (x) {
+    this.score_state(x);
+    if (!this.best || x < this.best) this.best = x;
+    this.rqueue.add(this);
   },
   set_level: function (x) {
     this.level = x;
   },
-  set_stats: function (s) {
-    this.length(s.length);
-    let html = "<ul>";
-    let ct = 0;
-    for (var i = 0; i < s.subtours.length; i++)
-      if (s.subtours[i].is_complete) {
-        ct++;
-        let st = s.subtours[i];
-        let prebox = st.subtour
-          ? '<div class="prebox" style="background-color: ' +
-            this.color_func(st.subtour) +
-            ';"></div>'
-          : '<div class="prebox"></div>';
-        html +=
-          "<li>" +
-          prebox +
-          Math.floor(st.length * this.scale + 0.5) +
-          '<span class="node_count">(' +
-          st.nodes +
-          " " +
-          tr("Locations") +
-          ")</span></li>";
-      }
-    html += "</ul>";
-    this.n_stats.innerHTML = ct ? html : "";
-    if (s.valid) {
-      this.n_valid.className = "s_valid";
-      this.n_valid_t.innerHTML = tr("Solution is valid");
-      this.n_valid_s.innerHTML = tr("valid solution");
-    } else {
-      this.n_valid.className = "s_incomplete";
-      this.n_valid_t.innerHTML = tr("Solution is invalid");
-      this.n_valid_s.innerHTML = tr("invalid solution");
-    }
+  can_improve: function () {
+    return !this.gave_up;
   },
-  add_vehicle: function () {
-    if (this.num_vehicles >= MAX_VEHICLES) return MAX_VEHICLES;
-    this.num_vehicles++;
-    $("current_vehicles").innerHTML = this.num_vehicles;
-    return this.num_vehicles;
+  auto_flash: function (color) {
+    var _this = this;
+    this.director.cancel(this, "auto_color");
+    this.director.schedule(
+      this,
+      { auto_color$: ["#fff", 0, color, 0.1, 0, "#fff", 0.7] },
+      function () {
+        delete _this.auto_color;
+        _this.n_auto.style.backgroundColor = "";
+      },
+    );
+    this.rqueue.add(this);
   },
-  rem_vehicle: function () {
-    if (this.num_vehicles <= 1) return 1;
-    this.num_vehicles--;
-    $("current_vehicles").innerHTML = this.num_vehicles;
-    return this.num_vehicles;
+  auto_give_up: function () {
+    this.n_auto_text.innerHTML = tr("I couldn't find any improvements!");
+    this.auto_flash("#f00");
+    this.gave_up = 1;
   },
-  cycle_vehicles: function () {
-    if (this.num_vehicles == MAX_VEHICLES) this.num_vehicles = 1;
-    else this.num_vehicles++;
-    $("current_vehicles").innerHTML = this.num_vehicles;
-    return this.num_vehicles;
+  auto_active: function () {
+    this.n_auto_text.innerHTML = tr("Looking for improvements ...");
+    this.gave_up = 0;
+  },
+  auto_ready: function () {
+    this.n_auto_text.innerHTML = tr("Let me improve your current tour.");
+    this.gave_up = 0;
+  },
+  improved: function (x) {
+    return this.best ? Math.floor(x) < Math.floor(this.best) : 1;
   },
   reset: function (x) {
     this.scale = engine.scene.scene_scale
@@ -4084,8 +5332,21 @@ VRPBoard.prototype = {
       : 1e3 / 3 / max(engine.sheet.width, engine.sheet.height);
     this.director.cancel(this);
     this.n_length.innerHTML = x ? Math.floor(x * this.scale) : 0;
-    this.n_stats.innerHTML = "";
+    this.n_best.innerHTML = "----";
+    this.best = undefined;
     this.current_length = 0;
+    this.last_complete = 0;
+    this.current_lk_length = 0;
+    this.lk_len = 0;
+    this.game_finished = 0;
+    this.current_percent = 0;
+    this.percent_color = "#aaa";
+    this.auto_ready();
+    delete this.auto_color;
+    this.n_auto.style.backgroundColor = "";
+    this.n_hint.innerHTML = tr(
+      "Connect all locations in the shortest possible way.",
+    );
     this.rqueue.add(this);
   },
   updateHtml: function (name, val) {
@@ -4095,51 +5356,110 @@ VRPBoard.prototype = {
       this["_prev_val_" + name] = val;
     }
   },
-  scale_diff: function (x, y) {
-    return Math.floor(x * this.scale) - Math.floor(y * this.scale);
-  },
   render: function (dummy) {
+    this.updateHtml("n_length", Math.floor(this.current_length * this.scale));
+    var lkl = Math.floor(this.current_lk_length * this.scale);
+    if (isNaN(lkl) || lkl < 1e-4) lkl = "----";
+    this.updateHtml("n_lk_length", lkl);
     this.updateHtml(
-      "n_length",
-      Math.floor(this.current_length * this.scale + 0.5),
+      "n_best",
+      this.best ? Math.floor(this.best * this.scale) : "----",
     );
+    this.n_best.style.color = this.score_color;
+    if (this.auto_color) this.n_auto.style.backgroundColor = this.auto_color;
+    this.updateHtml(
+      "n_percent",
+      (this.current_percent * 100 + 1e-4).toFixed(0),
+    );
+    this.n_percent.style.color = this.percent_color;
+    this.n_percent_sign.style.color = this.percent_color;
   },
   switch_actor: function () {
-    if (this.current_actor != "scene") {
+    if (this.current_actor == "tour") {
       this.current_actor = "scene";
       $("a_edit").className = "edit_scene";
-      $("a_depot").className = "edit_none";
     } else {
       this.current_actor = "tour";
       $("a_edit").className = "edit_tour";
     }
     return this.current_actor;
-  },
-  switch_depot: function () {
-    if (this.current_actor != "depot") {
-      $("a_depot").className = "edit_scene";
-      this.current_actor = "depot";
-      $("a_edit").className = "edit_tour";
-    } else {
-      $("a_depot").className = "edit_none";
-      this.current_actor = "tour";
-    }
-    return this.current_actor;
-  },
-  set_depot: function () {
-    $("a_depot").className = "edit_none";
-    this.current_actor = "tour";
   },
   reset_actor: function () {
     this.current_actor = "tour";
     $("a_edit").className = "edit_tour";
-    $("a_depot").className = "edit_none";
     return "tour";
   },
   actor_type: function () {
     return this.current_actor;
   },
 };
+function TourOverlay(anim, sheet, tour, color) {
+  var c_overlay;
+  this.orig_opa = 1;
+  this.ovl_opa = 0;
+  function render_tour(tour, color) {
+    var gtour = new gfx.Tour();
+    var h = tour.events.register(function (ev) {
+      for (var i = 0; i < ev.length; i++)
+        if (ev[i].action === "add")
+          gtour.create(ev[i].edge.l1, ev[i].edge.l2, []);
+        else;
+    });
+    tour.report_edges();
+    tour.events.unregister(h);
+    var tsheet = sheet.tmpSheet();
+    gtour.edge_color = color;
+    gtour.render(tsheet);
+    gtour.close();
+    return tsheet.get_canvas();
+  }
+  var c_tour = sheet.canvas_node("c_tour");
+  var c_inter = sheet.canvas_node("c_inter");
+  c_overlay = render_tour(tour, color);
+  c_overlay.style.opacity = 0;
+  var par = c_tour.parentNode;
+  var next = c_tour.nextSibling;
+  if (!next) par.appendChild(c_overlay);
+  else par.insertBefore(c_overlay, next);
+  anim.Director.schedule(this, {
+    orig_opa: [0, 0.5, 0.3, 0, 0.1, 0.3, 0, 0.2, 0.3],
+    ovl_opa: [0, 1, 0.05],
+  });
+  var _this = this;
+  this.fade = function (callback) {
+    if (this.fading) return;
+    anim.Director.cancel(this);
+    this.fading = 1;
+    var _this = this;
+    anim.Director.schedule(
+      _this,
+      { ovl_opa: [0, 0, 0.5], orig_opa: [0, 1, 0.5] },
+      function () {
+        c_overlay.parentNode.removeChild(c_overlay);
+        c_overlay = undefined;
+        delete _this.fading;
+        callback();
+      },
+    );
+    anim.Queue.add(_this);
+  };
+  this.close = function () {
+    anim.Director.cancel(this);
+    anim.Queue.cancel(this);
+    if (c_overlay) {
+      c_overlay.parentNode.removeChild(c_overlay);
+      c_tour.style.opacity = 1;
+      c_inter.style.opacity = 1;
+    }
+    c_overlay = undefined;
+  };
+  this.render = function (sheet) {
+    c_tour.style.opacity = this.orig_opa;
+    c_inter.style.opacity = this.orig_opa;
+    if (c_overlay) c_overlay.style.opacity = this.ovl_opa;
+  };
+  anim.Queue.add(this);
+}
 var MSPointer;
 if (window.PointerEvent && navigator.maxTouchPoints)
   MSPointer = {
@@ -4580,7 +5900,7 @@ function TourEngine(sheet_param) {
             locationState(e.edge.l1);
             locationState(e.edge.l2);
             if (e.context === "merge" || e.context === "clear")
-              ge.deleteMergeAnim(SEEDED_RANDOM.random() * 0.5);
+              ge.deleteMergeAnim(Math.random() * 0.5);
             else if (e.context != "silent") ge.deleteAnim();
           }
           break;
@@ -4593,7 +5913,7 @@ function TourEngine(sheet_param) {
           if (e.context === "merge") {
             locationState(e.edge.l1);
             locationState(e.edge.l2);
-            e.edge.gfx.appearMerge(SEEDED_RANDOM.random() * 0.4);
+            e.edge.gfx.appearMerge(Math.random() * 0.4);
           } else {
             if (e.context === "auto" || e.context === "auto_loc") {
               locationState(e.edge.l1);
@@ -4619,7 +5939,7 @@ function TourEngine(sheet_param) {
           locationState(e.location);
           break;
         case "subtour":
-          e.location.gfx.subtour(e.subtour, SEEDED_RANDOM.random() * 0.2);
+          e.location.gfx.subtour(e.subtour, Math.random() * 0.2);
           break;
         case "decross":
           var e0 = e.edges[0],
@@ -4798,30 +6118,36 @@ function TourEngine(sheet_param) {
   module.sheet = _sheet;
   module.scene = _scene;
   module.anim = anim;
+  module.tour = _tour;
   return module;
 }
 var MAX_LOCS = 99;
 var MIN_LOCS = 5;
+var _board;
+var _best_tour;
+var _opt_tour;
 var engine;
 var controls;
 var gfx;
 var anim;
-var _board;
-var _vrp_state;
 function tsp_setup() {
   var sheet = new Sheet("layers");
   anim = ANIM(sheet);
   gfx = GFX(anim);
   engine = TourEngine(sheet);
   engine.on_scene_change = function (scene, tour) {
+    if (scene.locs.length >= 2) {
+      schedule_linkern();
+      _board.reset(tour.length());
+    } else {
+      _board.lk_length(0);
+      stop_linkern();
+    }
     update_size(scene);
-    tour_change(tour);
   };
   engine.on_tour_change = tour_change;
+  _board = new Scoreboard(anim);
   controls = Controls(engine);
-  _board = new VRPBoard(anim, function (st) {
-    return engine.st_color(st);
-  });
 }
 function tsp_init(div) {
   tsp_reset();
@@ -4830,8 +6156,8 @@ function tsp_init(div) {
 }
 function init_buttons() {
   controls.setup_button($("a_newgame"), tsp_reset);
+  controls.setup_button($("a_lkshow"), tsp_show_linkern, tsp_show_normal);
   controls.setup_button($("a_edit"), tsp_switch_actor);
-  controls.setup_button($("a_depot"), tsp_edit_depot);
   controls.setup_button($("a_fewer"), function () {
     tsp_rem_location(5);
   });
@@ -4839,42 +6165,43 @@ function init_buttons() {
     tsp_add_location(5);
   });
   controls.setup_button($("a_clear_all"), tsp_clear_all);
-  controls.setup_button($("a_v_plus"), tsp_add_vehicle);
-  controls.setup_button($("a_v_minus"), tsp_rem_vehicle);
-  controls.setup_button($("d_vehicles"), tsp_cycle_vehicles);
-  controls.setup_button($("d_locs"), function () {
-    tsp_add_location(1);
-  });
+  controls.setup_button($("a_switch_best"), tsp_switch_best);
+  controls.setup_button($("best_length_info"), tsp_show_best, tsp_show_normal);
+  controls.setup_button($("a_auto"), tsp_improve);
   controls.setup_button($("a_apply_seed"), tsp_apply_seed);
-  controls.setup_button($("a_auto"), vrp_auto);
   controls.setup_button($("a_scene_1"), function () {
-    vrp_load_scene(1);
+    tsp_load_scene(1);
   });
   controls.setup_button($("a_scene_2"), function () {
-    vrp_load_scene(2);
+    tsp_load_scene(2);
   });
   controls.setup_button($("a_scene_3"), function () {
-    vrp_load_scene(3);
+    tsp_load_scene(3);
+  });
+  controls.setup_button($("a_scene_4"), function () {
+    tsp_load_scene(4);
   });
 }
 function update_size(scene) {
   $("current_size").innerHTML = scene.size();
   if (scene.size() >= 5) _board.set_level(scene.size());
 }
-var _last_length = 0;
-var _disable_board_updates;
+var _disable_board_updates = false;
 function tour_change(tour) {
-  let stats = tour.subtour_stats();
-  _board.set_stats(stats);
+  var len = tour.length();
+  _board.length(len);
   if (!(_disable_board_updates || engine.in_remove_op))
-    if (stats.valid && _last_length) {
-      let diff = _board.scale_diff(stats.length, _last_length);
-      _last_length = stats.length;
+    if (tour.complete()) {
+      var diff = _board.complete(len);
       var p = engine.sheet.pointer();
       if (!p) p = vec(engine.sheet.width / 2, engine.sheet.height / 2);
       new gfx.anim.Diff(diff, p);
-    } else if (stats.valid) _last_length = stats.length;
-    else _last_length = 0;
+      if (_board.improved(len)) {
+        if (_best_tour) _best_tour.close();
+        _best_tour = tour.copy();
+      }
+      _board.test_score(len);
+    } else _board.incomplete(len);
 }
 var _target_size;
 function tsp_size(x) {
@@ -4884,6 +6211,10 @@ function tsp_size(x) {
   if (engine.scene.size() == x) return;
   _board.set_level(x);
   engine.set_actor(_board.reset_actor());
+  if (_best_tour) {
+    _best_tour.close();
+    _best_tour = undefined;
+  }
   engine.stopInit();
   var addsize = x - engine.scene.size();
   for (var i = 0; i < addsize; i++) engine.initRndLoc();
@@ -4899,148 +6230,121 @@ function tsp_rem_location(x) {
   tsp_size(_target_size - x);
   _disable_board_updates = false;
 }
-var VRP_SCENE = {
-  index: ["sc1", "sc2", "sc3"],
-  sc1: {
-    depot: [500, 500],
-    locs: [
-      [100, 100],
-      [150, 250],
-      [300, 150],
-      [100, 350],
-      [250, 300],
-      [900, 900],
-      [850, 750],
-      [700, 850],
-      [900, 650],
-      [750, 700],
-    ],
-  },
-  sc2: {
-    depot: [500, 500],
-    locs: [
-      [100, 100],
-      [150, 250],
-      [300, 150],
-      [900, 100],
-      [850, 250],
-      [700, 150],
-      [100, 900],
-      [150, 750],
-      [300, 850],
-      [900, 900],
-      [850, 750],
-      [700, 850],
-      [500, 100],
-      [500, 900],
-      [100, 500],
-      [900, 500],
-    ],
-  },
-  sc3: {
-    depot: [500, 500],
-    locs: [
-      [850, 500],
-      [823, 634],
-      [747, 747],
-      [634, 823],
-      [500, 850],
-      [366, 823],
-      [253, 747],
-      [177, 634],
-      [150, 500],
-      [177, 366],
-      [253, 253],
-      [366, 177],
-      [500, 150],
-      [634, 177],
-      [747, 253],
-      [823, 366],
-    ],
-  },
-};
-function vrp_load_scene(x) {
-  return tsp_reset(x);
-}
 function tsp_reset(scidx) {
   engine.stopInit();
+  if (_ovl) _ovl.close();
   engine.cancel_anim();
-  _vrp_state = undefined;
-  if (isSmall() && !scidx) {
-    _target_size = 10;
-    _board.set_level(_target_size);
-  }
-  _disable_board_updates = true;
   _board.reset();
   _board.reset_actor();
   engine.set_actor(_board.actor_type());
+  if (_best_tour) {
+    _best_tour.close();
+    _best_tour = undefined;
+  }
   engine.scene.clear();
   engine.sheet.wipe_clean();
   if (isPhone()) window.scrollTo(0, 1);
-  if (scidx) {
+  if (scidx)
     try {
-      var scName = VRP_SCENE.index[scidx - 1];
-      var sc = VRP_SCENE[scName];
-      var pts = [sc.depot].concat(sc.locs);
-      engine.scene.load(pts);
-      engine.scene.locs[0].is_depot = true;
-      engine.scene.depot_count = 1;
-      _board.set_level(sc.locs.length);
+      var sc = SCENE.index[scidx - 1];
+      if (SCENE[sc].length > MAX_LOCS || SCENE[sc].length < MIN_LOCS)
+        throw "Scene of size " + SCENE[sc].length + " cannot be loaded";
+      engine.scene.load(SCENE[sc]);
+      _board.set_level(engine.scene.size());
       _target_size = engine.scene.size();
     } catch (x) {
       alert(x);
     }
-  } else {
-    engine.initDepot();
+  else {
     _target_size = _board.level;
     for (var i = 0; i < _board.level; i++) engine.initRndLoc();
   }
-  _disable_board_updates = false;
+}
+function tsp_load_scene(x) {
+  return tsp_reset(x);
+}
+var _ovl;
+function tsp_show_best() {
+  if (!_best_tour) return;
+  if (_ovl) _ovl.close();
+  _ovl = new TourOverlay(anim, engine.sheet, _best_tour, "#0f0");
+}
+function tsp_show_normal() {
+  if (_ovl)
+    _ovl.fade(function () {
+      _ovl = undefined;
+    });
+}
+function tsp_show_linkern() {
+  if (!_lk_tour) return;
+  if (_ovl) _ovl.close();
+  _ovl = new TourOverlay(anim, engine.sheet, _lk_tour, "#f00");
+}
+function tsp_show_opt() {
+  if (_ovl) _ovl.close();
+  _ovl = new TourOverlay(anim, engine.sheet, _opt_tour, "#f00");
+}
+function tsp_switch_best() {
+  if (!_best_tour) return;
+  engine.merge_tour(_best_tour);
 }
 function tsp_clear_all() {
   engine.clear_tour();
-  _vrp_state = undefined;
 }
-function tsp_edit_depot() {
-  engine.set_actor(_board.switch_depot(), function () {
-    _board.set_depot();
-  });
+function find_scene_middle() {
+  var _max = max(engine.sheet.width, engine.sheet.height);
+  var step = _max / 10;
+  var m = vec(engine.sheet.width / 2, engine.sheet.height / 2);
+  for (var rad = step; rad < _max; rad += step) {
+    var locs = engine.scene.query_rect(rect_around(m, rad * 2));
+    if (locs && locs.length) {
+      var min_d = MAXVAL;
+      var best;
+      for (var i = 0; i < locs.length; i++) {
+        var d = locs[i].dist(m);
+        if (d < min_d) {
+          min_d = d;
+          best = locs[i];
+        }
+      }
+      for (var i = 0; i < engine.scene.locs.length; i++)
+        if (engine.scene.locs[i] === best) return i;
+    }
+  }
 }
-function tsp_add_vehicle() {
-  engine.set_vehicles(_board.add_vehicle());
+function create_tour(scene, t) {
+  var res = new Tour(scene),
+    l = scene.locs,
+    n = t.length;
+  for (var i = 0; i < n; i++) res.connect(l[t[i]], l[t[(i + 1) % n]]);
+  return res;
 }
-function tsp_rem_vehicle() {
-  engine.set_vehicles(_board.rem_vehicle());
-}
-function tsp_cycle_vehicles() {
-  engine.set_vehicles(_board.cycle_vehicles());
+function tsp_improve() {
+  if (!_board.can_improve()) return;
+  _board.auto_active();
+  setTimeout(function () {
+    if (!_board.can_improve()) return;
+    var init_locs = engine.tour_locations();
+    var start;
+    if (!init_locs.length) start = find_scene_middle();
+    var opt = new OptLib(engine.scene.locs);
+    var topt = opt.construct("nneigh", init_locs, start);
+    if (engine.tour_complete()) {
+      topt = opt.optimize_step();
+      if (!topt) {
+        _board.auto_give_up();
+        return;
+      }
+      if (!(opt.length() < engine.tour_length() - 1e-4)) {
+        _board.auto_give_up();
+        return;
+      } else _board.auto_ready();
+    }
+    engine.merge_tour(create_tour(engine.scene, topt));
+  }, 5);
 }
 function tsp_switch_actor() {
   engine.set_actor(_board.switch_actor());
-}
-function tsp_language(x) {
-  init_language(x);
-}
-function init_language(x) {
-  if (x == null) LANGUAGE = detect_language();
-  else LANGUAGE = x;
-  var node_text = {
-    a_newgame: "RESET BOARD",
-    tx_edit: "edit",
-    tx_fewer: "fewer",
-    tx_more: "more",
-    tx_v_plus: "more",
-    tx_v_minus: "fewer",
-    tx_locations: "Locations",
-    tx_vehicles: "Vehicles",
-    tx_depot: "depot",
-    clear_text: "clear all connections",
-    tx_length: "tour&nbsp;length",
-    tx_length_s: "length",
-    tx_valid: "Solution is invalid",
-    tx_valid_s: "invalid solution",
-  };
-  for (var id in node_text) $(id).innerHTML = tr(node_text[id]);
 }
 function tsp_apply_seed() {
   var seedInput = $("seed_input");
@@ -5052,212 +6356,31 @@ function tsp_apply_seed() {
   SEEDED_RANDOM.setSeed(seed);
   tsp_reset();
 }
-
-// Build or improve a VRP solution: first run creates routes, later runs improve
-function vrp_auto() {
-  try {
-    var scene = engine.scene;
-    var locs = scene.locs.slice();
-    var depot;
-    var customers = [];
-    for (var i = 0; i < locs.length; i++) {
-      if (locs[i].is_depot) depot = locs[i];
-      else customers.push(locs[i]);
-    }
-    if (!depot || customers.length === 0) return;
-    var k = _board.num_vehicles || 2;
-    if (k < 1) k = 1;
-    if (k > MAX_VEHICLES) k = MAX_VEHICLES;
-    function d(p, q) {
-      var dx = p.x - q.x,
-        dy = p.y - q.y;
-      return Math.sqrt(dx * dx + dy * dy);
-    }
-    function d2(p, q) {
-      var dx = p.x - q.x,
-        dy = p.y - q.y;
-      return dx * dx + dy * dy;
-    }
-    function route_length(rt) {
-      if (!rt || !rt.length) return 0;
-      var sum = d(depot, rt[0]);
-      for (var i = 0; i + 1 < rt.length; i++) sum += d(rt[i], rt[i + 1]);
-      sum += d(rt[rt.length - 1], depot);
-      return sum;
-    }
-    function two_opt_once(rt) {
-      var n = rt.length;
-      if (n < 4) return;
-      var best_gain = 0,
-        besti = -1,
-        bestj = -1;
-      for (var i = 0; i < n - 2; i++)
-        for (var j = i + 2; j < n; j++) {
-          var pre =
-            d(rt[i], rt[i + 1]) +
-            d(rt[j], j + 1 < n ? rt[j + 1] : depot) +
-            (i == 0 ? d(depot, rt[i]) : d(rt[i - 1], rt[i]));
-          var post =
-            d(rt[i], rt[j]) +
-            d(rt[i + 1], j + 1 < n ? rt[j + 1] : depot) +
-            (i == 0 ? d(depot, rt[i]) : d(rt[i - 1], rt[i]));
-          var gain = pre - post;
-          if (gain > best_gain) {
-            best_gain = gain;
-            besti = i;
-            bestj = j;
-          }
-        }
-      if (best_gain > 1e-6) {
-        var lo = besti + 1,
-          hi = bestj;
-        while (lo < hi) {
-          var tmp = rt[lo];
-          rt[lo] = rt[hi];
-          rt[hi] = tmp;
-          lo++;
-          hi--;
-        }
-        return true;
-      }
-    }
-    function improve_routes(routes, passes) {
-      for (var p = 0; p < passes; p++)
-        for (var r = 0; r < routes.length; r++) {
-          if (!routes[r] || routes[r].length < 3) continue;
-          while (two_opt_once(routes[r]));
-        }
-    }
-    if (!_vrp_state || !_vrp_state.routes || _vrp_state.k !== k) {
-      var angles = [];
-      for (var i = 0; i < customers.length; i++) {
-        angles.push({
-          c: customers[i],
-          a: Math.atan2(customers[i].y - depot.y, customers[i].x - depot.x)
-        });
-      }
-      angles.sort(function (a, b) { return a.a - b.a; });
-      var maxGap = 0;
-      var splitIndex = 0;
-      for (var i = 0; i < angles.length; i++) {
-        var gap = angles[(i + 1) % angles.length].a - angles[i].a;
-        if (gap < 0) gap += 2 * Math.PI;
-        if (gap > maxGap) {
-          maxGap = gap;
-          splitIndex = (i + 1) % angles.length;
-        }
-      }
-      var sortedCustomers = [];
-      for (var i = 0; i < angles.length; i++) {
-        sortedCustomers.push(angles[(splitIndex + i) % angles.length].c);
-      }
-      customers = sortedCustomers;
-
-      var buckets = [];
-      for (var i = 0; i < k; i++) buckets[i] = [];
-      for (var i = 0; i < customers.length; i++) {
-        buckets[Math.floor((i * k) / customers.length)].push(customers[i]);
-      }
-      function order_route(list) {
-        if (list.length <= 2) return list.slice();
-        var used = {};
-        var start = list[0];
-        var bestIdx = 0;
-        var md = MAXVAL;
-        for (var i = 0; i < list.length; i++) {
-          var dd = d2(list[i], depot);
-          if (dd < md) {
-            md = dd;
-            bestIdx = i;
-          }
-        }
-        start = list[bestIdx];
-        var res = [start];
-        used[start.id] = 1;
-        while (res.length < list.length) {
-          var last = res[res.length - 1];
-          var bd = MAXVAL,
-            bn;
-          for (var j = 0; j < list.length; j++) {
-            var v = list[j];
-            if (used[v.id]) continue;
-            var dd = d2(last, v);
-            if (dd < bd) {
-              bd = dd;
-              bn = v;
-            }
-          }
-          res.push(bn);
-          used[bn.id] = 1;
-        }
-        return res;
-      }
-      var routes = [];
-      for (var r = 0; r < buckets.length; r++)
-        if (buckets[r].length > 0) routes.push(order_route(buckets[r]));
-      _vrp_state = { routes: routes, k: k };
-    } else {
-      var routes = _vrp_state.routes;
-      var bestDelta = 0,
-        bri = -1,
-        bi = -1,
-        brj = -1,
-        pos = -1;
-      for (var ri = 0; ri < routes.length; ri++)
-        for (var i = 0; i < routes[ri].length; i++)
-          for (var rj = 0; rj < routes.length; rj++) {
-            if (ri === rj) continue;
-            var node = routes[ri][i];
-            var from = routes[ri];
-            var to = routes[rj];
-            var beforeLen = route_length(from) + route_length(to);
-            var rem = from.slice();
-            var nd = rem.splice(i, 1)[0];
-            for (var ins = 0; ins <= to.length; ins++) {
-              var to2 = to.slice();
-              to2.splice(ins, 0, nd);
-              var delta = beforeLen - (route_length(rem) + route_length(to2));
-              if (delta > bestDelta) {
-                bestDelta = delta;
-                bri = ri;
-                bi = i;
-                brj = rj;
-                pos = ins;
-              }
-            }
-          }
-      if (bestDelta > 1e-6) {
-        var nd = routes[bri].splice(bi, 1)[0];
-        routes[brj].splice(pos, 0, nd);
-      }
-    }
-    improve_routes(_vrp_state.routes, 1);
-    engine.clear_tour();
-    var newTour = new Tour(scene);
-    for (var r = 0; r < _vrp_state.routes.length; r++) {
-      var route = _vrp_state.routes[r];
-      if (route && route.length) {
-        newTour.connect(depot, route[0]);
-        for (var j = 0; j + 1 < route.length; j++)
-          newTour.connect(route[j], route[j + 1]);
-        newTour.connect(route[route.length - 1], depot);
-      }
-    }
-    engine.merge_tour(newTour);
-  } catch (e) {
-    console.exception(e);
-  }
+function tsp_language(x) {
+  init_language(x);
 }
-
-// Seeded Random Number Generator
-var SEEDED_RANDOM = {
-  seed: 1871,
-  setSeed: function (seed) {
-    this.seed = seed;
-  },
-  random: function () {
-    // Linear Congruential Generator
-    this.seed = (this.seed * 1664525 + 1013904223) % 4294967296;
-    return this.seed / 4294967296;
-  },
-};
+function locationStates(scene) {
+  for (var i = 0; i < scene.locs.length; i++) locationState(scene.locs[i]);
+}
+function init_language(x) {
+  if (x == null) LANGUAGE = detect_language();
+  else LANGUAGE = x;
+  var node_text = {
+    a_newgame: "RANDOM GAME",
+    tx_edit: "edit",
+    tx_fewer: "fewer",
+    tx_more: "more",
+    tx_locations: "Locations",
+    tx_best_tour: "best&nbsp;tour",
+    a_lkshow: "SHOW ANSWER",
+    clear_text: "clear all connections",
+    tx_length: "tour&nbsp;length",
+    best_text: "back to the best solution",
+    tx_best: "best&nbsp;so&nbsp;far",
+    tx_best_s: "best",
+    auto_text: "Let me improve your current tour.",
+    scenes_title: "Load Scene",
+    hint_text: "Connect all locations in the shortest possible way.",
+  };
+  for (var id in node_text) $(id).innerHTML = tr(node_text[id]);
+}

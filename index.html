@@ -8,12 +8,12 @@
 		:root { color-scheme: light dark; }
 		* { box-sizing: border-box; }
 		html, body { height: 100%; margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
-		body { display: flex; align-items: center; justify-content: center; background: #0b0c10; color: #e6e6e6; }
+		body { display: flex; flex-direction: column; align-items: center; padding: 40px 20px; background: #0b0c10; color: #e6e6e6; }
 		.container { width: 100%; max-width: 960px; padding: 24px; text-align: center; }
 		.logo { width: min(60vw, 360px); height: auto; display: block; margin: 0 auto 16px auto; filter: drop-shadow(0 6px 18px rgba(0,0,0,0.35)); }
 		h1 { margin: 8px 0 16px; font-size: clamp(1.6rem, 2.4vw + 1rem, 2.4rem); letter-spacing: 0.3px; }
 		.subtitle { margin: 0 0 28px; opacity: 0.85; }
-		.grid { display: grid;grid-template-columns: repeat(2, 1fr);grid-template-rows: repeat(2, 1fr); gap: 1rem; align-items: stretch; }
+		.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; align-items: stretch; }
 		.card { background: #1f2833; border: 1px solid #2d3a46; border-radius: 12px; padding: 18px; text-align: left; transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease; }
 		.card:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,0.25); border-color: #3a4a58; }
 		.card h2 { margin: 0 0 8px; font-size: 1.1rem; }
@@ -54,6 +54,21 @@
 				<h2>TSP Challenge</h2>
 				<p>Challenge mode for the Traveling Salesman Problem.</p>
 				<a href="./tsp_challenge.html" aria-label="Open TSP Challenge">Open</a>
+			</article>
+            <article class="card">
+				<h2>Auto-Pilot Demo</h2>
+				<p>Automated navigation and routing demonstration.</p>
+				<a href="./autopilot.html" aria-label="Open Auto-Pilot Demo">Open</a>
+			</article>
+			<article class="card">
+				<h2>Secret Challenge</h2>
+				<p>Secret challenge mode (Requires Password).</p>
+				<a href="./secret_challenge.html" aria-label="Open Secret Challenge">Open</a>
+			</article>
+			<article class="card">
+				<h2>Canadian TSP Variant</h2>
+				<p>Explore the Canadian Traveling Salesman Problem variant.</p>
+				<a href="./canadian_tsp.html" aria-label="Open Canadian TSP Variant">Open</a>
 			</article>
 		</section>
 

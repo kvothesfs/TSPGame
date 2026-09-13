@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="engine_general.css" media="screen" />
     <link rel="stylesheet" href="engine_mobile.css"
         media="only screen and (max-width: 780px), screen and (max-height: 440px)" />
-    <link rel="stylesheet" href="engine_challenge.css"
+    <link rel="stylesheet" href="engine.css"
         type="text/css" media="only screen and (min-width: 781px) and (min-height: 441px)" />
     <link rel="stylesheet" href="icon_style.css" type="text/css" media="screen" />
 
@@ -17,7 +17,7 @@
         var FORCE_TOUCHMODE = false;
     </script>
 
-    <script src="js/tsp_game.js"></script>
+    <script src="js/canadian_board.js"></script>
     <meta charset="UTF-8">
 
 </head>
@@ -36,9 +36,13 @@
             </div>            
         </div>
 
-        <a id="a_auto" href="#">
+        <a id="a_travel" href="#" onclick="startTravel()">
+            <div id="auto_label">TRAVEL</div>
+            <div id="auto_text">Begin Journey</div>
+        </a>
+        <a id="a_auto" href="#" style="display:none;">
             <div id="auto_label">AUTO</div>
-            <div id="auto_text">Let me improve your current tour.</div>
+            <div id="auto_text">Build/improve tour</div>
         </a>
         
         <div id="score_info">
@@ -96,7 +100,7 @@
 
         <div id="seed_control">
             <div id="seed_title">Random Seed</div>
-            <input type="number" id="seed_input" value="3862" min="1" max="999999">
+            <input type="number" id="seed_input" value="1871" min="1" max="999999">
             <a id="a_apply_seed" href="#">Apply</a>
         </div>
 
@@ -126,8 +130,66 @@
         tsp_setup();
         tsp_init('layers');
         tsp_language('en');
-        tsp_add_location(20);
-        tsp_apply_seed();
+        tsp_load_scene(2); // Provide a default scene to play with
+        
+        var isTraveling = false;
+        function startTravel() {
+            if(isTraveling) return;
+            if(!engine.tour || !engine.tour.complete()) { alert("Finish your tour first!"); return; }
+            
+            isTraveling = true;
+            document.getElementById("auto_text").innerText = "Traveling...";
+            
+            var edges = engine.tour._edges;
+            if(!edges || edges.length === 0) { isTraveling = false; return; }
+            
+            var ctx = engine.sheet.anim_tour_context(true);
+            var i = 0;
+            
+            var travelInterval = setInterval(function() {
+                if(i >= edges.length) {
+                    clearInterval(travelInterval);
+                    isTraveling = false;
+                    document.getElementById("auto_text").innerText = "You made it!";
+                    alert("Congratulations, you made it through the snow!");
+                    return;
+                }
+                
+                var e = edges[i];
+                // 15% chance to break!
+                if(i > 0 && Math.random() < 0.15) {
+                    clearInterval(travelInterval);
+                    isTraveling = false;
+                    document.getElementById("auto_text").innerText = "Road Blocked!";
+                    
+                    // Draw an X to show the road is blocked
+                    ctx.beginPath();
+                    var mx = (e.l1.x + e.l2.x)/2;
+                    var my = (e.l1.y + e.l2.y)/2;
+                    ctx.moveTo(mx-10, my-10); ctx.lineTo(mx+10, my+10);
+                    ctx.moveTo(mx+10, my-10); ctx.lineTo(mx-10, my+10);
+                    ctx.lineWidth = 5;
+                    ctx.strokeStyle = "red";
+                    ctx.stroke();
+                    
+                    alert("Oh no! The road ahead is blocked by snow! Reroute your remaining path!");
+                    // Disconnect the broken edge so the user is forced to redraw
+                    engine.tour.disconnect(e.l1, e.l2);
+                    engine.on_tour_change(engine.tour);
+                    return;
+                }
+                
+                // Draw traveler progress
+                ctx.beginPath();
+                ctx.moveTo(e.l1.x, e.l1.y);
+                ctx.lineTo(e.l2.x, e.l2.y);
+                ctx.lineWidth = 4;
+                ctx.strokeStyle = "orange";
+                ctx.stroke();
+                
+                i++;
+            }, 600);
+        }
     </script>
 
 
